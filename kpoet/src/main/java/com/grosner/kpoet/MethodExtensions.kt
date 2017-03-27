@@ -41,25 +41,13 @@ fun MethodSpec.Builder.`if`(statement: String, vararg args: Any?,
                             function: CodeBlock.Builder.() -> CodeBlock.Builder)
         = beginControl("if", statement = statement, args = *args, function = function)
 
-fun MethodSpec.Builder.`if`(arg: Args,
-                            function: CodeBlock.Builder.() -> CodeBlock.Builder)
-        = beginControl("if", arg, function)
-
 fun MethodSpec.Builder.`do`(statement: String, vararg args: Any?,
                             function: CodeBlock.Builder.() -> CodeBlock.Builder)
         = beginControl("do", statement = statement, args = *args, function = function)
 
-fun MethodSpec.Builder.`do`(arg: Args,
-                            function: CodeBlock.Builder.() -> CodeBlock.Builder)
-        = beginControl("do", arg, function)
+fun MethodSpec.Builder.`while`(statement: String, vararg args: Any?) = endControl("while", statement = statement, args = *args)
 
-fun MethodSpec.Builder.`while`(statement: String, vararg args: Any?,
-                               function: CodeBlock.Builder.() -> CodeBlock.Builder)
-        = beginControl("while", statement = statement, args = *args, function = function).endControlFlow()
-
-fun MethodSpec.Builder.`while`(arg: Args,
-                               function: CodeBlock.Builder.() -> CodeBlock.Builder)
-        = beginControl("while", arg, function).endControlFlow()
+fun MethodSpec.Builder.`while`(arg: Args) = endControl("while", arg = arg)
 
 infix fun MethodSpec.Builder.`else`(function: CodeBlock.Builder.() -> CodeBlock.Builder)
         = nextControl("else", function = function)
@@ -68,24 +56,13 @@ fun MethodSpec.Builder.`else if`(statement: String, vararg args: Any?,
                                  function: CodeBlock.Builder.() -> CodeBlock.Builder)
         = nextControl("else if", statement = statement, args = *args, function = function)
 
-fun MethodSpec.Builder.`else if`(arg: Args,
-                                 function: CodeBlock.Builder.() -> CodeBlock.Builder)
-        = nextControl("else if", arg, function)
-
 fun MethodSpec.Builder.`for`(statement: String, vararg args: Any?,
                              function: CodeBlock.Builder.() -> CodeBlock.Builder)
-        = beginControl("for", statement = statement, args = *args, function = function).endControlFlow()
-
-fun MethodSpec.Builder.`for`(arg: Args,
-                             function: CodeBlock.Builder.() -> CodeBlock.Builder)
-        = beginControl("for", arg, function).endControlFlow()
+        = beginControl("for", statement = statement, args = *args, function = function).endControlFlow()!!
 
 fun MethodSpec.Builder.`switch`(statement: String, vararg args: Any?,
                                 function: CodeBlock.Builder.() -> CodeBlock.Builder)
-        = beginControl("switch", statement = statement, args = *args, function = function).endControlFlow()
-
-fun MethodSpec.Builder.`switch`(arg: Args, function: CodeBlock.Builder.() -> CodeBlock.Builder)
-        = beginControl("switch", arg, function).endControlFlow()
+        = beginControl("switch", statement = statement, args = *args, function = function).endControlFlow()!!
 
 fun MethodSpec.Builder.`return`(statement: String, vararg args: Any?) = addStatement("return $statement", *args)!!
 
@@ -100,17 +77,13 @@ private fun MethodSpec.Builder.nextControl(name: String, statement: String = "",
         = nextControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)
         .addCode(function(CodeBlock.builder()).build())!!
 
-private fun MethodSpec.Builder.nextControl(name: String, arg: Args,
-                                           function: CodeBlock.Builder.() -> CodeBlock.Builder)
-        = nextControlFlow("$name${if (arg.code.isNullOrEmpty()) "" else " (${arg.code})"}", *arg.args)
-        .addCode(function(CodeBlock.builder()).build())!!
-
 private fun MethodSpec.Builder.beginControl(name: String, statement: String = "", vararg args: Any?,
                                             function: CodeBlock.Builder.() -> CodeBlock.Builder)
         = beginControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)
         .addCode(function(CodeBlock.builder()).build())!!
 
-private fun MethodSpec.Builder.beginControl(name: String, arg: Args,
-                                            function: CodeBlock.Builder.() -> CodeBlock.Builder)
-        = beginControlFlow("$name${if (arg.code.isNullOrEmpty()) "" else " (${arg.code})"}", *arg.args)
-        .addCode(function(CodeBlock.builder()).build())!!
+private fun MethodSpec.Builder.endControl(name: String, statement: String = "", vararg args: Any?)
+        = endControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)!!
+
+private fun MethodSpec.Builder.endControl(name: String, arg: Args)
+        = endControlFlow("$name${if (arg.code.isNullOrEmpty()) "" else " (${arg.code})"}", *arg.args)!!

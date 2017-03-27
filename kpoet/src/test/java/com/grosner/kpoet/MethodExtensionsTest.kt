@@ -26,6 +26,7 @@ class MethodExtensionsTest : Spek({
                     }
                 }
 
+                println(method.build().toString())
                 assertEquals("public void handleAction(java.lang.String action) {\n" +
                         "  switch (action) {\n" +
                         "    case \"bonus\": {\n" +
@@ -53,6 +54,7 @@ class MethodExtensionsTest : Spek({
                     }
                 }
 
+                println(method.build().toString())
                 assertEquals("public void handleAction(java.lang.String action) {\n" +
                         "  switch (action) {\n" +
                         "    case \"bonus\": {\n" +
@@ -74,10 +76,11 @@ class MethodExtensionsTest : Spek({
                         `continue`()
                     }.`else if`("i < 0") {
                         statement("j++")
-                    }
+                    }.end()
                 }
             }
 
+            println(method.build().toString())
             assertEquals("" +
                     "public void forLoop() {\n" +
                     "  int j = 0;\n" +
@@ -87,7 +90,26 @@ class MethodExtensionsTest : Spek({
                     "    } else if (i < 0) {\n" +
                     "      j++;\n" +
                     "    }\n" +
-                    "  }\n", method.build().toString())
+                    "  }\n" +
+                    "}\n", method.build().toString())
+        }
+
+        on("do while loops") {
+            val method = method(private methodNamed "doWhile") {
+                `do`("i++") {
+                    `if`("i == 5") {
+                        `break`()
+                    }.end()
+                }.`while`("i < 0")
+            }
+            println(method.build().toString())
+            assertEquals("private void doWhile() {\n" +
+                    "  do (i++) {\n" +
+                    "    if (i == 5) {\n" +
+                    "      break;\n" +
+                    "    }\n" +
+                    "  } while (i < 0);\n" +
+                    "}\n", method.build().toString())
         }
     }
 })
