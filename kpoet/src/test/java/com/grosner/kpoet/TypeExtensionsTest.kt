@@ -20,11 +20,9 @@ class TypeExtensionsTest : Spek({
             val typeSpec = `class`("TestClass") {
                 modifiers(publicFinal)
                 method(public methodNamed "doGood" returns String::class) {
-                    code {
-                        addStatement("\$T a = 1", TypeName.INT)
-                        addStatement("\$T b = 2", TypeName.INT)
-                        addStatement("\$T sum = a + b", TypeName.INT)
-                    }
+                    statement("\$T a = 1", TypeName.INT)
+                    statement("\$T b = 2", TypeName.INT)
+                    statement("\$T sum = a + b", TypeName.INT)
 
                     `if`("sum > 3") {
                         `return`(str("Large Sum"))

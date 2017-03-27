@@ -3,6 +3,7 @@ package com.grosner.kpoet
 import com.squareup.javapoet.*
 import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
+import kotlin.reflect.KClass
 
 fun TypeSpec.Builder.extends(typeName: TypeName) = superclass(typeName)
 
@@ -16,44 +17,56 @@ fun TypeSpec.Builder.modifiers(vararg modifier: Modifier) = addModifiers(*modifi
 
 fun TypeSpec.Builder.modifiers(modifiers: Collection<Modifier>) = addModifiers(*modifiers.toTypedArray())!!
 
-fun `class`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+infix fun TypeSpec.Builder.annotation(type: KClass<*>) = addAnnotation(type.java)
+
+infix fun TypeSpec.Builder.annotation(type: ClassName) = addAnnotation(type)
+
+inline fun TypeSpec.Builder.annotation(className: ClassName,
+                                       function: AnnotationSpec.Builder.() -> AnnotationSpec.Builder)
+        = addAnnotation(AnnotationSpec.builder(className).function().build())
+
+inline fun TypeSpec.Builder.annotation(className: KClass<*>,
+                                       function: AnnotationSpec.Builder.() -> AnnotationSpec.Builder)
+        = addAnnotation(AnnotationSpec.builder(className.java).function().build())
+
+inline fun `class`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.classBuilder(className)).build()!!
 
-fun JavaFile.Builder.`class`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun JavaFile.Builder.`class`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.classBuilder(className)).build()!!
 
-fun `interface`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun `interface`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.interfaceBuilder(className)).build()!!
 
-fun JavaFile.Builder.`interface`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun JavaFile.Builder.`interface`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.interfaceBuilder(className)).build()!!
 
-fun `abstract class`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun `abstract class`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.classBuilder(className)).addModifiers(Modifier.ABSTRACT).build()!!
 
-fun JavaFile.Builder.`abstract class`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun JavaFile.Builder.`abstract class`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.classBuilder(className).addModifiers(Modifier.ABSTRACT)).build()!!
 
-fun `final class`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun `final class`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.classBuilder(className)).addModifiers(Modifier.FINAL).build()!!
 
-fun JavaFile.Builder.`final class`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun JavaFile.Builder.`final class`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.classBuilder(className).addModifiers(Modifier.FINAL)).build()!!
 
-fun `enum`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun `enum`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.enumBuilder(className)).build()!!
 
-fun JavaFile.Builder.`enum`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun JavaFile.Builder.`enum`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.enumBuilder(className)).build()!!
 
-fun JavaFile.Builder.`anonymous class`(typeArgumentsFormat: String, vararg args: Any?,
-                                       typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun JavaFile.Builder.`anonymous class`(typeArgumentsFormat: String, vararg args: Any?,
+                                              typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.anonymousClassBuilder(typeArgumentsFormat, *args)).build()!!
 
-fun `@interface`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun `@interface`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.annotationBuilder(className)).build()!!
 
-fun JavaFile.Builder.`@interface`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun JavaFile.Builder.`@interface`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.annotationBuilder(className)).build()!!
 
 fun TypeSpec.Builder.method(methodSpec: MethodSpec.Builder,
