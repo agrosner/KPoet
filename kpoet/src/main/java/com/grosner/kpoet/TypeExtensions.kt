@@ -34,6 +34,12 @@ fun `abstract class`(className: String, typeSpecFunc: TypeSpec.Builder.() -> Typ
 fun JavaFile.Builder.`abstract class`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.classBuilder(className).addModifiers(Modifier.ABSTRACT)).build()!!
 
+fun `final class`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+        = typeSpecFunc(TypeSpec.classBuilder(className)).addModifiers(Modifier.FINAL).build()!!
+
+fun JavaFile.Builder.`final class`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+        = typeSpecFunc(TypeSpec.classBuilder(className).addModifiers(Modifier.FINAL)).build()!!
+
 fun `enum`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
         = typeSpecFunc(TypeSpec.enumBuilder(className)).build()!!
 
