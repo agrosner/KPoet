@@ -21,6 +21,11 @@ fun CodeBlock.Builder.statement(arg: Args) = addStatement(arg.code, *arg.args)!!
 
 fun CodeBlock.Builder.statement(code: String, vararg args: Any?) = addStatement(code, *args)!!
 
+fun CodeBlock.Builder.end(statement: String = "", vararg args: Any?) = end(Args(statement, args))
+
+fun CodeBlock.Builder.end(arg: Args) =
+        (if (arg.code.isNullOrBlank().not()) endControlFlow(arg.code, *arg.args) else endControlFlow())!!
+
 // control flow extensions
 fun CodeBlock.Builder.`if`(statement: String, vararg args: Any?,
                            function: CodeBlock.Builder.() -> CodeBlock.Builder)
