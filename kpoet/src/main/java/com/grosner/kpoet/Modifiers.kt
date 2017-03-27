@@ -1,9 +1,16 @@
 package com.grosner.kpoet
 
+import javax.lang.model.element.Modifier
 import javax.lang.model.element.Modifier.*
+
+val packagePrivate
+    get() = listOf<Modifier>()
 
 val publicFinal
     get() = listOf(PUBLIC, FINAL)
+
+val publicStatic
+    get() = listOf(PUBLIC, STATIC)
 
 val publicStaticFinal
     get() = listOf(PUBLIC, STATIC, FINAL)

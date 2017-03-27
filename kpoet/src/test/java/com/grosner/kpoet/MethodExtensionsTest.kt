@@ -16,6 +16,7 @@ class MethodExtensionsTest : Spek({
                         String::class paramNamed "action") {
                     switch("action") {
                         case(str("bonus")) {
+                            // str -> "\$S", "bonus"
                             statement("this.\$L = \$S", "name", "BONUS")
                             `break`()
                         }

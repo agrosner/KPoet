@@ -9,6 +9,10 @@ fun method(methodSpec: MethodSpec.Builder,
            methodSpecFunction: MethodSpec.Builder.() -> MethodSpec.Builder = { this })
         = methodSpecFunction(methodSpec).addParameters(parameters.map { it.build() }.toList())!!
 
+fun abstractMethod(methodSpec: MethodSpec.Builder,
+                   vararg parameters: ParameterSpec.Builder)
+        = methodSpec.addModifiers(Modifier.ABSTRACT).addParameters(parameters.map { it.build() }.toList())!!
+
 fun overrideMethod(methodSpec: MethodSpec.Builder,
                    vararg parameters: ParameterSpec.Builder,
                    methodSpecFunction: MethodSpec.Builder.() -> MethodSpec.Builder = { this })
@@ -65,6 +69,12 @@ inline fun MethodSpec.Builder.`else if`(statement: String, vararg args: Any?,
                                         function: CodeBlock.Builder.() -> CodeBlock.Builder)
         = nextControl("else if", statement = statement, args = *args, function = function)
 
+
+fun MethodSpec.Builder.end(statement: String = "", vararg args: Any?) = end(Args(statement, args))
+
+fun MethodSpec.Builder.end(arg: Args) =
+        (if (arg.code.isNullOrBlank().not()) endControlFlow(arg.code, *arg.args) else endControlFlow())!!
+
 inline fun MethodSpec.Builder.`for`(statement: String, vararg args: Any?,
                                     function: CodeBlock.Builder.() -> CodeBlock.Builder)
         = beginControl("for", statement = statement, args = *args, function = function).endControlFlow()!!
@@ -80,6 +90,12 @@ fun MethodSpec.Builder.`return`(arg: Args) = addStatement("return ${arg.code}", 
 fun MethodSpec.Builder.`break`() = addStatement("break")!!
 
 fun MethodSpec.Builder.`continue`() = addStatement("continue")!!
+
+fun MethodSpec.Builder.`throw new`(type: KClass<*>, statement: String, vararg arg: Any?)
+        = addStatement("throw new \$T(\"$statement\")", type.java, *arg)!!
+
+fun MethodSpec.Builder.`throw new`(type: ClassName, statement: String, vararg arg: Any?)
+        = addStatement("throw new \$T(\"$statement\")", type, *arg)!!
 
 inline fun MethodSpec.Builder.nextControl(name: String, statement: String = "", vararg args: Any?,
                                           function: CodeBlock.Builder.() -> CodeBlock.Builder)
