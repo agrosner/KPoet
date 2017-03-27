@@ -18,6 +18,7 @@ class TypeExtensionsTest : Spek({
     describe("type extensions") {
         on("can create a class with a method that sums two numbers with if else branches") {
             val typeSpec = `class`("TestClass") {
+                modifiers(publicFinal)
                 method(public methodNamed "doGood" returns String::class) {
                     code {
                         addStatement("\$T a = 1", TypeName.INT)
@@ -36,7 +37,7 @@ class TypeExtensionsTest : Spek({
             }
 
             it("should generate proper class file") {
-                assertEquals("class TestClass {\n" +
+                assertEquals("public final class TestClass {\n" +
                         "  public java.lang.String doGood() {\n" +
                         "    int a = 1;\n" +
                         "    int b = 2;\n" +
@@ -54,7 +55,8 @@ class TypeExtensionsTest : Spek({
 
         on("can create a class with fields") {
             val isReady = "isReady"
-            val typeSpec = `class`("TestClass") {
+            val typeSpec = `abstract class`("TestClass") {
+                modifiers(public)
                 field(TypeName.BOOLEAN fieldNamed isReady init lit(false))
                 field(String::class fieldNamed isReady init str("SomeName"))
 
@@ -64,7 +66,7 @@ class TypeExtensionsTest : Spek({
             }
 
             it("should generate proper class file") {
-                assertEquals("class TestClass {\n" +
+                assertEquals("public abstract class TestClass {\n" +
                         "  boolean isReady = false;\n\n" +
                         "  java.lang.String isReady = \"SomeName\";\n\n" +
                         "  TestClass(boolean isReady) {\n" +
