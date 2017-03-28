@@ -19,7 +19,8 @@ class TypeExtensionsTest : Spek({
         on("can create a class with a method that sums two numbers with if else branches") {
             val typeSpec = `class`("TestClass") {
                 modifiers(publicFinal)
-                method(public methodNamed "doGood" returns String::class) {
+
+                `public`(String::class, "doGood") {
                     statement("\$T a = 1", TypeName.INT)
                     statement("\$T b = 2", TypeName.INT)
                     statement("\$T sum = a + b", TypeName.INT)
@@ -55,10 +56,10 @@ class TypeExtensionsTest : Spek({
             val isReady = "isReady"
             val typeSpec = `abstract class`("TestClass") {
                 modifiers(public)
-                field(TypeName.BOOLEAN fieldNamed isReady init lit(false))
-                field(String::class fieldNamed isReady init str("SomeName"))
+                `package private field`(TypeName.BOOLEAN, isReady, { init(lit(false)) })
+                `package private field`(String::class, isReady, { init(str("SomeName")) })
 
-                constructor(TypeName.BOOLEAN paramNamed isReady) {
+                constructor(param(TypeName.BOOLEAN, isReady)) {
                     statement("this.\$1L = \$1L", isReady)
                 }
             }
@@ -79,8 +80,8 @@ class TypeExtensionsTest : Spek({
                 extends(parameterized<String>(List::class))
                 implements(parameterized<String>(Comparable::class), Serializable::class.typeName)
 
-                overrideMethod(public methodNamed "compareTo" returns Int::class,
-                        String::class paramNamed "other") {
+                `public`(Int::class, "compareTo", param(String::class, "other")) {
+                    annotation(Override::class)
                     `return`(lit(0))
                 }
             }

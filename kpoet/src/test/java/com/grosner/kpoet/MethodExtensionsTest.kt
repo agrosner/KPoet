@@ -12,8 +12,7 @@ class MethodExtensionsTest : Spek({
         on("can create switch statements") {
 
             it("generates switch break") {
-                val method = method(public methodNamed "handleAction",
-                        String::class paramNamed "action") {
+                val method = `public`(TypeName.VOID, "handleAction", param(String::class, "action")) {
                     switch("action") {
                         case(str("bonus")) {
                             // str -> "\$S", "bonus"
@@ -27,7 +26,7 @@ class MethodExtensionsTest : Spek({
                     }
                 }
 
-                println(method.build().toString())
+                println(method.toString())
                 assertEquals("public void handleAction(java.lang.String action) {\n" +
                         "  switch (action) {\n" +
                         "    case \"bonus\": {\n" +
@@ -39,12 +38,12 @@ class MethodExtensionsTest : Spek({
                         "      break;\n" +
                         "    }\n" +
                         "  }\n" +
-                        "}\n", method.build().toString())
+                        "}\n", method.toString())
             }
 
             it("generates switch return") {
-                val method = method(public methodNamed "handleAction",
-                        String::class paramNamed "action") {
+                val method = `public`(TypeName.VOID, "handleAction",
+                        param(String::class, "action")) {
                     switch("action") {
                         case(str("bonus")) {
                             `return`(str("BONUS"))
@@ -55,7 +54,7 @@ class MethodExtensionsTest : Spek({
                     }
                 }
 
-                println(method.build().toString())
+                println(method.toString())
                 assertEquals("public void handleAction(java.lang.String action) {\n" +
                         "  switch (action) {\n" +
                         "    case \"bonus\": {\n" +
@@ -65,12 +64,12 @@ class MethodExtensionsTest : Spek({
                         "      return \"NO BONUS\";\n" +
                         "    }\n" +
                         "  }\n" +
-                        "}\n", method.build().toString())
+                        "}\n", method.toString())
             }
         }
 
         on("print for loops") {
-            val method = method(public methodNamed "forLoop") {
+            val method = `public`(TypeName.VOID, "forLoop") {
                 statement("\$T j = 0", TypeName.INT)
                 `for`("\$T i = 0; i < size; i++", TypeName.INT) {
                     `if`("i > 0") {
@@ -81,7 +80,7 @@ class MethodExtensionsTest : Spek({
                 }
             }
 
-            println(method.build().toString())
+            println(method.toString())
             assertEquals("" +
                     "public void forLoop() {\n" +
                     "  int j = 0;\n" +
@@ -92,25 +91,25 @@ class MethodExtensionsTest : Spek({
                     "      j++;\n" +
                     "    }\n" +
                     "  }\n" +
-                    "}\n", method.build().toString())
+                    "}\n", method.toString())
         }
 
         on("do while loops") {
-            val method = method(private methodNamed "doWhile") {
+            val method = `private`(TypeName.VOID, "doWhile") {
                 `do`("i++") {
                     `if`("i == 5") {
                         `break`()
                     }.end()
                 }.`while`("i < 0")
             }
-            println(method.build().toString())
+            println(method.toString())
             assertEquals("private void doWhile() {\n" +
                     "  do (i++) {\n" +
                     "    if (i == 5) {\n" +
                     "      break;\n" +
                     "    }\n" +
                     "  } while (i < 0);\n" +
-                    "}\n", method.build().toString())
+                    "}\n", method.toString())
         }
     }
 })

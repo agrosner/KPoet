@@ -1,34 +1,20 @@
 package com.grosner.kpoet
 
 import com.squareup.javapoet.*
-import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-fun method(methodSpec: MethodSpec.Builder,
-           vararg parameters: ParameterSpec.Builder,
-           methodSpecFunction: MethodSpec.Builder.() -> MethodSpec.Builder = { this })
-        = methodSpecFunction(methodSpec).addParameters(parameters.map { it.build() }.toList())!!
-
-fun abstractMethod(methodSpec: MethodSpec.Builder,
-                   vararg parameters: ParameterSpec.Builder)
-        = methodSpec.addModifiers(Modifier.ABSTRACT).addParameters(parameters.map { it.build() }.toList())!!
-
-fun overrideMethod(methodSpec: MethodSpec.Builder,
-                   vararg parameters: ParameterSpec.Builder,
-                   methodSpecFunction: MethodSpec.Builder.() -> MethodSpec.Builder = { this })
-        = methodSpecFunction(methodSpec).addParameters(parameters.map { it.build() }.toList())
-        .addAnnotation(Override::class.java)!!
-
-infix fun List<Modifier>.methodNamed(name: String) = MethodSpec.methodBuilder(name).addModifiers(this)!!
+typealias CodeMethod = CodeBlock.Builder.() -> CodeBlock.Builder
+typealias MethodMethod = MethodSpec.Builder.() -> MethodSpec.Builder
+typealias FieldMethod = FieldSpec.Builder.() -> FieldSpec.Builder
 
 infix fun MethodSpec.Builder.returns(typeName: TypeName) = returns(typeName)!!
 
 infix fun MethodSpec.Builder.returns(typeName: KClass<*>) = returns(typeName.java)!!
 
-inline fun MethodSpec.Builder.code(codeMethod: CodeBlock.Builder.() -> CodeBlock.Builder) = addCode(codeMethod(CodeBlock
+inline fun MethodSpec.Builder.code(codeMethod: CodeMethod) = addCode(codeMethod(CodeBlock
         .builder()).build())!!
 
-inline fun MethodSpec.Builder.statement(codeMethod: CodeBlock.Builder.() -> CodeBlock.Builder)
+inline fun MethodSpec.Builder.statement(codeMethod: CodeMethod)
         = addStatement("\$L", codeMethod(CodeBlock.builder()).build().toString())!!
 
 fun MethodSpec.Builder.statement(arg: Args) = addStatement(arg.code, *arg.args)!!
@@ -51,22 +37,22 @@ inline fun MethodSpec.Builder.annotation(className: KClass<*>,
 
 // control flow extensions
 inline fun MethodSpec.Builder.`if`(statement: String, vararg args: Any?,
-                                   function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                   function: CodeMethod)
         = beginControl("if", statement = statement, args = *args, function = function)
 
 inline fun MethodSpec.Builder.`do`(statement: String, vararg args: Any?,
-                                   function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                   function: CodeMethod)
         = beginControl("do", statement = statement, args = *args, function = function)
 
 fun MethodSpec.Builder.`while`(statement: String, vararg args: Any?) = endControl("while", statement = statement, args = *args)
 
 fun MethodSpec.Builder.`while`(arg: Args) = endControl("while", arg = arg)
 
-infix inline fun MethodSpec.Builder.`else`(function: CodeBlock.Builder.() -> CodeBlock.Builder)
+infix inline fun MethodSpec.Builder.`else`(function: CodeMethod)
         = nextControl("else", function = function)
 
 inline fun MethodSpec.Builder.`else if`(statement: String, vararg args: Any?,
-                                        function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                        function: CodeMethod)
         = nextControl("else if", statement = statement, args = *args, function = function)
 
 
@@ -76,11 +62,11 @@ fun MethodSpec.Builder.end(arg: Args) =
         (if (arg.code.isNullOrBlank().not()) endControlFlow(arg.code, *arg.args) else endControlFlow())!!
 
 inline fun MethodSpec.Builder.`for`(statement: String, vararg args: Any?,
-                                    function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                    function: CodeMethod)
         = beginControl("for", statement = statement, args = *args, function = function).endControlFlow()!!
 
 inline fun MethodSpec.Builder.`switch`(statement: String, vararg args: Any?,
-                                       function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                       function: CodeMethod)
         = beginControl("switch", statement = statement, args = *args, function = function).endControlFlow()!!
 
 fun MethodSpec.Builder.`return`(statement: String, vararg args: Any?) = addStatement("return $statement", *args)!!
@@ -98,12 +84,12 @@ fun MethodSpec.Builder.`throw new`(type: ClassName, statement: String, vararg ar
         = addStatement("throw new \$T(\"$statement\")", type, *arg)!!
 
 inline fun MethodSpec.Builder.nextControl(name: String, statement: String = "", vararg args: Any?,
-                                          function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                          function: CodeMethod)
         = nextControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)
         .addCode(function(CodeBlock.builder()).build())!!
 
 inline fun MethodSpec.Builder.beginControl(name: String, statement: String = "", vararg args: Any?,
-                                           function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                           function: CodeMethod)
         = beginControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)
         .addCode(function(CodeBlock.builder()).build())!!
 

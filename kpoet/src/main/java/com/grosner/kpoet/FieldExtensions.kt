@@ -3,9 +3,9 @@ package com.grosner.kpoet
 import com.squareup.javapoet.*
 import kotlin.reflect.KClass
 
-infix fun TypeName.fieldNamed(name: String) = FieldSpec.builder(this, name)!!
+fun field(typeName: TypeName, name: String) = FieldSpec.builder(typeName, name)!!
 
-infix fun <T : Any> KClass<T>.fieldNamed(name: String) = FieldSpec.builder(this.java, name)!!
+fun field(kClass: KClass<*>, name: String) = FieldSpec.builder(kClass.java, name)!!
 
 infix inline fun FieldSpec.Builder.init(codeFunc: CodeBlock.Builder.() -> CodeBlock.Builder)
         = initializer(codeFunc(CodeBlock.builder()).build())!!

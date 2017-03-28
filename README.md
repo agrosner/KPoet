@@ -1,8 +1,8 @@
 # KPoet
 
-KPoet is a Kotlin extensions library on top of [JavaPoet](https://github.com/square/javapoet) that helps to make code read more like writing actual Java code.
+KPoet is a Kotlin extensions library on top of [JavaPoet](https://github.com/square/javapoet) that helps you write code that writes code _feel_ like actually writing code.
 
-From their [Example](https://github.com/square/javapoet#example):
+From their main [Example](https://github.com/square/javapoet#example):
 
 Here's a (boring) `HelloWorld` class:
 
@@ -18,6 +18,7 @@ public final class HelloWorld {
 ```
 
 And this is the (exciting) code to generate it with JavaPoet:
+
 ```java
 
 MethodSpec main = MethodSpec.methodBuilder("main")
@@ -39,7 +40,17 @@ javaFile.writeTo(System.out);
 
 ```
 
-And then using KPoet in Kotlin:
+While JavaPoet provides a very nice library that makes it easier to write code that writes Java code, there are a few problems with vanilla JavaPoet code:
+1. It is confusing why `MethodSpec` should get defined before writing your `TypeSpec`.
+2. The code ordering does not follow normal code flow, so you have to think about the ordering and map it to code.
+3. The code does not flow like how you would like to write code, leading to mistakes and making it more difficult to read when you need to generate complex code.
+
+`KPoet` attempts to solve these issues by:
+1. Mapping Kotlin DSL builders as close as possible to normal java code. (Yes it's quite possible)
+2. Have the code you write appear like normal Java, meaning less thinking and better readibility.
+3. Be more concise than JavaPoet so you can write less code but be more expressive.
+
+So using `KPoet` from the previous example:
 
 ```kotlin
 
