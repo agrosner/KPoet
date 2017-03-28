@@ -95,26 +95,28 @@ public boolean handleAction(String action) {
 
 ```
 
+We represent it as:
 
 ```kotlin
 
 `public`(TypeName.BOOLEAN, "handleAction",
        param(String::class, "action")) {
   switch("action") {
-    case(str("bonus")) { // str -> "\$S", "bonus"
-      statement("this.\$L = \$S", "name", "BONUS")
+    case("bonus".S) {
+       // str -> "\$S", "bonus"
+      statement("this.name = ${"BONUS".S}")
       `break`()
     }
     default {
-      statement("this.\$L= \$S", "name", "NO BONUS")
+      statement("this.name = ${"NO BONUS".S}")
       `break`()
     }
   }
 
-  `if`("this.\$L == \$S", "name", "BONUS") {
-    `return`(lit(true)) // lit -> "\$L", true
-  }.`else if`("this.\$L == \$S", "name", "NO BONUS") {
-    `return`(lit(false))
+  `if`("this.name == ${"BONUS".S}") {
+    `return`(true.L) // L -> true.toString()
+  }.`else if`("this.name == ${"NO_BONUS".S}") {
+    `return`(false.L)
   }.end() // end required for `if` and `else if`.
 
   `throw new`(IllegalStateException::class, "Did not process proper action")
@@ -211,10 +213,61 @@ addStatement("return \$L", someLiteral)
 can easily be replaced with:
 
 ```kotlin
-`return`(lit(someLiteral))
+`return`(someLiteral.L)
 ```
 
-Which JavaPoet computes as a literal value.
+This simply converts the object to string, but preserving the JavaPoet-like syntax.
+
+### $S is for Strings
+
+When using code that includes string literals, JavaPoet uses `$S` to emit a `string`, wrapping quotation marks to escape it.
+
+With the power of Kotlin string interpolation, we barely need to use $S. For cases where we need to convert it to a string for code output, KPoet provides the `Any?.S` property to simply wrap the object's `toString()` value in quotes.
+
+````kotlin
+
+`public`(String::class, "getStatus", param(TypeName.BOOLEAN, "isReady")) {
+  `if`("isReady") {
+    `return`("BONUS".S)
+  } else {
+    `return`("NO BONUS".S)
+  }
+}
+
+```
+
+which outputs:
+
+
+```java
+public String getStatus(boolean isReady) {
+  if (isReady) {
+    return "BONUS";
+  } else {
+    return "NO BONUS";
+  }
+}
+
+```
+### $T is for Types
+
+JavaPoet has spectacular handling of reference types by collecting and importing them to make the code much more readable, KPoet does not provide any extension on top of this functionality.
+
+You will still need to pass that class or `TypeName` to JavaPoet:
+
+```kotlin
+
+`abstract class`("TestClass") {  modifiers(public)
+    `package private field`(TypeName.BOOLEAN, isReady, { init(false.L) })
+    `package private field`(String::class, isReady, { init("SomeName".S) })
+
+    constructor(param(TypeName.BOOLEAN, isReady)) {
+        statement("this.$isReady = $isReady")
+    }
+}
+
+```
+
 
 ### Methods
 

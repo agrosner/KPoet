@@ -1,9 +1,13 @@
 package com.grosner.kpoet
 
-fun cargs(code: String, vararg args: Any?) = Args(code, args)
+/**
+ * Wraps an object in quotes to mirror JavaPoet's $S type.
+ */
+val Any?.S
+    get() = "\"$this\""
 
-fun str(code: String) = cargs("\$S", code)
-
-fun lit(arg: Any?) = cargs("\$L", arg)
-
-class Args(val code: String, val args: Array<out Any?>)
+/**
+ * Wraps an object in literal value to String to mirror JavaPoet's $L type
+ */
+val Any?.L
+    get() = "$this"

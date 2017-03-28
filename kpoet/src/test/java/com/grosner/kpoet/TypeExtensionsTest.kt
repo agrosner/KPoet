@@ -26,11 +26,11 @@ class TypeExtensionsTest : Spek({
                     statement("\$T sum = a + b", TypeName.INT)
 
                     `if`("sum > 3") {
-                        `return`(str("Large Sum"))
+                        `return`("Large Sum".S)
                     }.`else if`("sum < 3") {
-                        `return`(str("Small Sum"))
+                        `return`("Small Sum".S)
                     } `else` {
-                        `return`(str("Three is the Sum"))
+                        `return`("Three is the Sum".S)
                     }
                 }
             }
@@ -56,11 +56,11 @@ class TypeExtensionsTest : Spek({
             val isReady = "isReady"
             val typeSpec = `abstract class`("TestClass") {
                 modifiers(public)
-                `package private field`(TypeName.BOOLEAN, isReady, { init(lit(false)) })
-                `package private field`(String::class, isReady, { init(str("SomeName")) })
+                `package private field`(TypeName.BOOLEAN, isReady, { init(false.L) })
+                `package private field`(String::class, isReady, { init("SomeName".S) })
 
                 constructor(param(TypeName.BOOLEAN, isReady)) {
-                    statement("this.\$1L = \$1L", isReady)
+                    statement("this.$isReady = $isReady")
                 }
             }
 
@@ -82,7 +82,7 @@ class TypeExtensionsTest : Spek({
 
                 `public`(Int::class, "compareTo", param(String::class, "other")) {
                     annotation(Override::class)
-                    `return`(lit(0))
+                    `return`(0.L)
                 }
             }
 

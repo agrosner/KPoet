@@ -14,13 +14,13 @@ class MethodExtensionsTest : Spek({
             it("generates switch break") {
                 val method = `public`(TypeName.VOID, "handleAction", param(String::class, "action")) {
                     switch("action") {
-                        case(str("bonus")) {
+                        case("bonus".S) {
                             // str -> "\$S", "bonus"
-                            statement("this.\$L = \$S", "name", "BONUS")
+                            statement("this.name = ${"BONUS".S}")
                             `break`()
                         }
                         default {
-                            statement("this.\$L= \$S", "name", "NO BONUS")
+                            statement("this.name = ${"NO BONUS".S}")
                             `break`()
                         }
                     }
@@ -45,11 +45,11 @@ class MethodExtensionsTest : Spek({
                 val method = `public`(TypeName.VOID, "handleAction",
                         param(String::class, "action")) {
                     switch("action") {
-                        case(str("bonus")) {
-                            `return`(str("BONUS"))
+                        case("bonus".S) {
+                            `return`("BONUS".S)
                         }
                         default {
-                            `return`(str("NO BONUS"))
+                            `return`("NO BONUS".S)
                         }
                     }
                 }

@@ -17,8 +17,6 @@ inline fun MethodSpec.Builder.code(codeMethod: CodeMethod) = addCode(codeMethod(
 inline fun MethodSpec.Builder.statement(codeMethod: CodeMethod)
         = addStatement("\$L", codeMethod(CodeBlock.builder()).build().toString())!!
 
-fun MethodSpec.Builder.statement(arg: Args) = addStatement(arg.code, *arg.args)!!
-
 fun MethodSpec.Builder.statement(code: String, vararg args: Any?) = addStatement(code, *args)!!
 
 fun MethodSpec.Builder.comment(comment: String) = addComment(comment)!!
@@ -46,8 +44,6 @@ inline fun MethodSpec.Builder.`do`(statement: String, vararg args: Any?,
 
 fun MethodSpec.Builder.`while`(statement: String, vararg args: Any?) = endControl("while", statement = statement, args = *args)
 
-fun MethodSpec.Builder.`while`(arg: Args) = endControl("while", arg = arg)
-
 infix inline fun MethodSpec.Builder.`else`(function: CodeMethod)
         = nextControl("else", function = function)
 
@@ -55,11 +51,8 @@ inline fun MethodSpec.Builder.`else if`(statement: String, vararg args: Any?,
                                         function: CodeMethod)
         = nextControl("else if", statement = statement, args = *args, function = function)
 
-
-fun MethodSpec.Builder.end(statement: String = "", vararg args: Any?) = end(Args(statement, args))
-
-fun MethodSpec.Builder.end(arg: Args) =
-        (if (arg.code.isNullOrBlank().not()) endControlFlow(arg.code, *arg.args) else endControlFlow())!!
+fun MethodSpec.Builder.end(statement: String = "", vararg args: Any?)
+        = (if (statement.isNullOrBlank().not()) endControlFlow(statement, *args) else endControlFlow())!!
 
 inline fun MethodSpec.Builder.`for`(statement: String, vararg args: Any?,
                                     function: CodeMethod)
@@ -70,8 +63,6 @@ inline fun MethodSpec.Builder.`switch`(statement: String, vararg args: Any?,
         = beginControl("switch", statement = statement, args = *args, function = function).endControlFlow()!!
 
 fun MethodSpec.Builder.`return`(statement: String, vararg args: Any?) = addStatement("return $statement", *args)!!
-
-fun MethodSpec.Builder.`return`(arg: Args) = addStatement("return ${arg.code}", *arg.args)!!
 
 fun MethodSpec.Builder.`break`() = addStatement("break")!!
 
@@ -95,6 +86,3 @@ inline fun MethodSpec.Builder.beginControl(name: String, statement: String = "",
 
 inline fun MethodSpec.Builder.endControl(name: String, statement: String = "", vararg args: Any?)
         = endControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)!!
-
-inline fun MethodSpec.Builder.endControl(name: String, arg: Args)
-        = endControlFlow("$name${if (arg.code.isNullOrEmpty()) "" else " (${arg.code})"}", *arg.args)!!

@@ -13,9 +13,6 @@ infix inline fun FieldSpec.Builder.init(codeFunc: CodeBlock.Builder.() -> CodeBl
 infix fun FieldSpec.Builder.init(code: String)
         = initializer(CodeBlock.builder().add(code).build())!!
 
-infix fun FieldSpec.Builder.init(code: Args)
-        = initializer(CodeBlock.builder().add(code.code, *code.args).build())!!
-
 infix fun FieldSpec.Builder.annotation(type: KClass<*>) = addAnnotation(type.java)!!
 
 infix fun FieldSpec.Builder.annotation(type: ClassName) = addAnnotation(type)!!
