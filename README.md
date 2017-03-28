@@ -57,8 +57,8 @@ So using `KPoet` from the previous example:
 javaFile("com.example.helloworld") {
   `class`("HelloWorld") {  modifiers(publicFinal)
 
-    method(publicStatic methodNamed "main",
-        Array<String>::class paramNamed "args") {
+    `public static`(TypeName.VOID, "main",
+        param(Array<String>::class, "args")) {
       statement("\$T.out.println(\$S)", System::class.java, "Hello, JavaPoet!")
     }
   }
@@ -98,8 +98,8 @@ public boolean handleAction(String action) {
 
 ```kotlin
 
-method(public methodNamed "handleAction" returns TypeName.BOOLEAN,
-       String::class paramNamed "action") {
+`public`(TypeName.BOOLEAN, "handleAction",
+       param(String::class, "action")) {
   switch("action") {
     case(str("bonus")) { // str -> "\$S", "bonus"
       statement("this.\$L = \$S", "name", "BONUS")
@@ -161,7 +161,7 @@ MethodSpec main = MethodSpec.methodBuilder("main")
 
 ```kotlin
 
-method(packagePrivate methodNamed "main" ) {
+`package private`(TypeName.VOID, "main") {
   statement("int total = 0")
   `for`("int i = 0; i < 10; i++") {
     statement("total += i")
@@ -190,7 +190,7 @@ In KPoet:
 
 ```kotlin
 
-fun computeRange(name: String, from: Int, to:Int, op: String) = method(packagePrivate methodNamed name returns TypeName.Int) {
+fun computeRange(name: String, from: Int, to:Int, op: String) = `package private`(TypeName.Int, name) {
   statement("int result = 0")
   `for`("int i = $from; i < $to; i++") {
     statement("result = result $op i")
@@ -226,7 +226,9 @@ You can write `abstract` methods easily:
 ```kotlin
 
 `abstract class`("HelloWorld") { modifiers(public)
-  abstractMethod(`protected` methodNamed "flux")
+  abstract(TypeName.VOID, "flux") {
+    modifiers(protected)
+  }
 }
 
 ```

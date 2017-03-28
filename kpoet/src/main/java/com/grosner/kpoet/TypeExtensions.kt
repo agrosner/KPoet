@@ -74,3 +74,23 @@ fun TypeSpec.Builder.constructor(vararg parameters: ParameterSpec.Builder,
         = addMethod(methodSpecFunction(MethodSpec.constructorBuilder()).addParameters(parameters.map { it.build() }
         .toMutableList()).build())!!
 
+fun TypeSpec.Builder.abstract(returnClass: ClassName, name: String,
+                              vararg parameters: ParameterSpec.Builder,
+                              methodSpecFunction: MethodSpec.Builder.() -> MethodSpec.Builder = { this })
+        = addMethod(methodSpecFunction(MethodSpec.methodBuilder(name))
+        .addModifiers(Modifier.ABSTRACT)
+        .addParameters(parameters.map { it.build() }
+                .toMutableList())
+        .returns(returnClass)
+        .build())!!
+
+fun TypeSpec.Builder.abstract(returnType: KClass<*>, name: String,
+                              vararg parameters: ParameterSpec.Builder,
+                              methodSpecFunction: MethodSpec.Builder.() -> MethodSpec.Builder = { this })
+        = addMethod(methodSpecFunction(MethodSpec.methodBuilder(name))
+        .addModifiers(Modifier.ABSTRACT)
+        .addParameters(parameters.map { it.build() }
+                .toMutableList())
+        .returns(returnType)
+        .build())!!
+
