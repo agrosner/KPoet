@@ -224,7 +224,7 @@ When using code that includes string literals, JavaPoet uses `$S` to emit a `str
 
 With the power of Kotlin string interpolation, we barely need to use $S. For cases where we need to convert it to a string for code output, KPoet provides the `Any?.S` property to simply wrap the object's `toString()` value in quotes.
 
-````kotlin
+```kotlin
 
 `public`(String::class, "getStatus", param(TypeName.BOOLEAN, "isReady")) {
   `if`("isReady") {
@@ -268,8 +268,28 @@ You will still need to pass that class or `TypeName` to JavaPoet:
 
 ```
 
+#### Import Static
 
-### Methods
+`KPoet` supports `import static` pretty easily. When constructing a `JavaFile`,
+pass them as the second parameter in the method:
+```kotlin
+
+val file = javaFile("com.grosner", {
+    `import static`(Collections::class, "*")
+    `import static`(ClassName.get(String::class.java), "*")
+}) {
+    `class`("HelloWorld") {
+        this
+    }
+}
+
+
+```
+
+Unfortunately `JavaPoet` does not allow adding them _until_ after the `JavaFile.Builder` is constructed,
+making it nearly impossible to place it in the same block as the `class`.
+
+#### Methods
 
 
 KPoet supports all kinds of methods.
@@ -291,5 +311,41 @@ Which generates:
 ```kotlin
 public abstract class HelloWorld {
   protected abstract void flux();
+}
+```
+
+#### Constructors
+
+Constructors are fairly easy to write.
+
+```kotlin
+
+`public class`("HelloWorld") {
+  `private final field`(String::class, "greeting")
+
+  `constructor`(param(String::class, "greeting")) {
+    modifiers(Modifier.PUBLIC)
+    statement("this.greeting = greeting")
+  }
+}
+
+```
+
+#### Parameters
+
+Parameters are done via global methods:
+
+```kotlin
+
+`package private`(TypeName.VOID, "welcomeOverlords",
+  `final param`(String::class, "android"),)
+  `final param`(String::class, "robot")
+
+```
+
+Which generates:
+
+```java
+void welcomeOverlords(final String android, final String robot) {
 }
 ```

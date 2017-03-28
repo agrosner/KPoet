@@ -6,6 +6,8 @@ import kotlin.reflect.KClass
 typealias CodeMethod = CodeBlock.Builder.() -> CodeBlock.Builder
 typealias MethodMethod = MethodSpec.Builder.() -> MethodSpec.Builder
 typealias FieldMethod = FieldSpec.Builder.() -> FieldSpec.Builder
+typealias ParamMethod = ParameterSpec.Builder.() -> ParameterSpec.Builder
+typealias AnnotationMethod = AnnotationSpec.Builder.() -> AnnotationSpec.Builder
 
 infix fun MethodSpec.Builder.returns(typeName: TypeName) = returns(typeName)!!
 
