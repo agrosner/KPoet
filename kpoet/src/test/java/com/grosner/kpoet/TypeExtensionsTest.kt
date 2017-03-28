@@ -56,8 +56,8 @@ class TypeExtensionsTest : Spek({
             val isReady = "isReady"
             val typeSpec = `abstract class`("TestClass") {
                 modifiers(public)
-                `package private field`(TypeName.BOOLEAN, isReady, { init(false.L) })
-                `package private field`(String::class, isReady, { init("SomeName".S) })
+                `package private field`(TypeName.BOOLEAN, isReady, { `=`(false.L) })
+                `package private field`(String::class, isReady, { `=`("SomeName".S) })
 
                 constructor(param(TypeName.BOOLEAN, isReady)) {
                     statement("this.$isReady = $isReady")
@@ -94,6 +94,49 @@ class TypeExtensionsTest : Spek({
                         "    return 0;\n" +
                         "  }\n" +
                         "}\n", typeSpec.toString())
+            }
+        }
+
+        on("can create enum class") {
+            val typeSpec = `enum`("Roshambo") {
+                modifiers(public)
+                case("ROCK", "fist".S) {
+                    `public`(String::class, "toString") {
+                        `@`(Override::class)
+                        `return`("avalanche!".S)
+                    }
+                }
+                case("SCISSORS", "peace".S)
+                case("PAPER", "flat".S)
+
+                `private final field`(String::class, "handsign")
+
+                `constructor`(param(String::class, "handsign")) {
+                    statement("this.handsign = handsign")
+                }
+            }
+
+            it("should generate proper class file") {
+                println(typeSpec.toString())
+                assertEquals(
+                        "public enum Roshambo {\n" +
+                                "  ROCK(\"fist\") {\n" +
+                                "    @java.lang.Override\n" +
+                                "    public java.lang.String toString() {\n" +
+                                "      return \"avalanche!\";\n" +
+                                "    }\n" +
+                                "  },\n\n" +
+
+                                "  SCISSORS(\"peace\"),\n\n" +
+
+                                "  PAPER(\"flat\");\n\n" +
+
+                                "  private final java.lang.String handsign;\n\n" +
+
+                                "  Roshambo(java.lang.String handsign) {\n" +
+                                "    this.handsign = handsign;\n" +
+                                "  }\n" +
+                                "}\n", typeSpec.toString())
             }
         }
     }

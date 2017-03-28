@@ -8,6 +8,7 @@ typealias MethodMethod = MethodSpec.Builder.() -> MethodSpec.Builder
 typealias FieldMethod = FieldSpec.Builder.() -> FieldSpec.Builder
 typealias ParamMethod = ParameterSpec.Builder.() -> ParameterSpec.Builder
 typealias AnnotationMethod = AnnotationSpec.Builder.() -> AnnotationSpec.Builder
+typealias TypeMethod = TypeSpec.Builder.() -> TypeSpec.Builder
 
 infix fun MethodSpec.Builder.returns(typeName: TypeName) = returns(typeName)!!
 
@@ -75,6 +76,12 @@ fun MethodSpec.Builder.`throw new`(type: KClass<*>, statement: String, vararg ar
 
 fun MethodSpec.Builder.`throw new`(type: ClassName, statement: String, vararg arg: Any?)
         = addStatement("throw new \$T(\"$statement\")", type, *arg)!!
+
+fun MethodSpec.Builder.`@`(kClass: KClass<*>, annotationMethod: AnnotationMethod = { this })
+        = addAnnotation(AnnotationSpec.builder(kClass.java).annotationMethod().build())!!
+
+fun MethodSpec.Builder.`@`(className: ClassName, annotationMethod: AnnotationMethod = { this })
+        = addAnnotation(AnnotationSpec.builder(className).annotationMethod().build())!!
 
 inline fun MethodSpec.Builder.nextControl(name: String, statement: String = "", vararg args: Any?,
                                           function: CodeMethod)

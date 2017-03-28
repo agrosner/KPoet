@@ -10,8 +10,14 @@ import kotlin.reflect.KClass
 fun param(annotationFunction: ParamMethod, kClass: KClass<*>, name: String)
         = ParameterSpec.builder(kClass.java, name)!!.annotationFunction()
 
+fun param(annotationFunction: ParamMethod, className: ClassName, name: String)
+        = ParameterSpec.builder(className, name)!!.annotationFunction()
+
 fun param(annotationSpec: AnnotationSpec.Builder, kClass: KClass<*>, name: String)
         = ParameterSpec.builder(kClass.java, name).addAnnotation(annotationSpec.build())!!
+
+fun param(annotationSpec: AnnotationSpec.Builder, className: ClassName, name: String)
+        = ParameterSpec.builder(className, name).addAnnotation(annotationSpec.build())!!
 
 fun param(kClass: KClass<*>, name: String) = ParameterSpec.builder(kClass.java, name)!!
 
@@ -36,20 +42,6 @@ fun ParameterSpec.Builder.`@`(kClass: KClass<*>, annotationMethod: AnnotationMet
 fun ParameterSpec.Builder.`@`(className: ClassName, annotationMethod: AnnotationMethod = { this })
         = addAnnotation(AnnotationSpec.builder(className).annotationMethod().build())!!
 
-fun `@`(kClass: KClass<*>, mapFunc: MutableMap<String, String>.() -> Unit = { })
-        = AnnotationSpec.builder(kClass.java)
-        .apply {
-            mutableMapOf<String, String>().apply { mapFunc(this) }
-                    .forEach { key, value -> addMember(key, value) }
-        }
-
-
-fun `@`(className: ClassName, mapFunc: MutableMap<String, String>.() -> Unit = {})
-        = AnnotationSpec.builder(className)
-        .apply {
-            mutableMapOf<String, String>().apply { mapFunc(this) }
-                    .forEach { key, value -> addMember(key, value) }
-        }
 
 
 

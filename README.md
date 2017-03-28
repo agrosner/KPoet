@@ -258,8 +258,8 @@ You will still need to pass that class or `TypeName` to JavaPoet:
 ```kotlin
 
 `abstract class`("TestClass") {  modifiers(public)
-    `package private field`(TypeName.BOOLEAN, isReady, { init(false.L) })
-    `package private field`(String::class, isReady, { init("SomeName".S) })
+    `package private field`(TypeName.BOOLEAN, isReady, { `=`(false.L) })
+    `package private field`(String::class, isReady, { `=`("SomeName".S) })
 
     constructor(param(TypeName.BOOLEAN, isReady)) {
         statement("this.$isReady = $isReady")
@@ -347,5 +347,79 @@ Which generates:
 
 ```java
 void welcomeOverlords(final String android, final String robot) {
+}
+```
+
+To add annotations to parameters, simply call:
+
+```kotlin
+
+`package private`(TypeName.VOID, "welcomeOverlords",
+  `final param`(`@`(TestAnnotation::class), String::class, "android"),)
+  `final param`(`@`(TestAnnotation::class, {
+                    this["name"] = "Some Kind of Member".S
+                    this["purpose"] = "Some Purpose we have".S
+                }, String::class, "robot")
+```
+
+#### Fields
+
+We easily add fields to our `TypeSpec` definition:
+
+
+```kotlin
+
+`public class`("HelloWorld") {
+  `private final field`(String::class, "robot", { `@`(Nullable::class) }) // can add annotations on fields
+  field(`@`(Nullable::class), String::class, "android") { `=`("THE BEST".S)} // or this way
+}
+
+```
+
+#### Enums
+
+use ``enum`()` to construct within a `javaFile`:
+
+```kotlin
+
+`enum`("Roshambo") { modifiers(public)
+    case("ROCK","fist".S){
+      `public`(String::class, "toString") {
+        `@`(Override::class)
+        `return`("avalanche!".S)
+      }
+    }
+    case("SCISSORS", "peace".S)
+    case("PAPER", "flat".S)
+
+    `private final field`(String::class, "handsign")
+
+    `constructor`(param(String::class, "handsign")) {
+      statement("this.handsign = handsign")
+    }
+}
+
+```
+
+which generates this:
+
+```java
+public enum Roshambo {
+  ROCK("fist") {
+    @Override
+    public void toString() {
+      return "avalanche!";
+    }
+  },
+
+  SCISSORS("peace"),
+
+  PAPER("flat");
+
+  private final String handsign;
+
+  Roshambo(String handsign) {
+    this.handsign = handsign;
+  }
 }
 ```

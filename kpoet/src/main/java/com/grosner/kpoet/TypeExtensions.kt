@@ -29,54 +29,54 @@ inline fun TypeSpec.Builder.annotation(className: KClass<*>,
                                        function: AnnotationSpec.Builder.() -> AnnotationSpec.Builder)
         = addAnnotation(AnnotationSpec.builder(className.java).function().build())!!
 
-inline fun `class`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun `class`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.classBuilder(className)).build()!!
 
-inline fun JavaFile.Builder.`class`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun JavaFile.Builder.`class`(className: ClassName, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.classBuilder(className)).build()!!
 
-inline fun `interface`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun `interface`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.interfaceBuilder(className)).build()!!
 
-inline fun JavaFile.Builder.`interface`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun JavaFile.Builder.`interface`(className: ClassName, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.interfaceBuilder(className)).build()!!
 
-inline fun `abstract class`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun `abstract class`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.classBuilder(className)).addModifiers(Modifier.ABSTRACT).build()!!
 
-inline fun JavaFile.Builder.`abstract class`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun JavaFile.Builder.`abstract class`(className: ClassName, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.classBuilder(className).addModifiers(Modifier.ABSTRACT)).build()!!
 
-inline fun `final class`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun `final class`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.classBuilder(className)).addModifiers(Modifier.FINAL).build()!!
 
-inline fun JavaFile.Builder.`final class`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun JavaFile.Builder.`final class`(className: ClassName, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.classBuilder(className).addModifiers(Modifier.FINAL)).build()!!
 
-inline fun `enum`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun `enum`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.enumBuilder(className)).build()!!
 
-inline fun JavaFile.Builder.`enum`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun JavaFile.Builder.`enum`(className: ClassName, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.enumBuilder(className)).build()!!
 
 inline fun JavaFile.Builder.`anonymous class`(typeArgumentsFormat: String, vararg args: Any?,
-                                              typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+                                              typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.anonymousClassBuilder(typeArgumentsFormat, *args)).build()!!
 
-inline fun `@interface`(className: String, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun `@interface`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.annotationBuilder(className)).build()!!
 
-inline fun JavaFile.Builder.`@interface`(className: ClassName, typeSpecFunc: TypeSpec.Builder.() -> TypeSpec.Builder)
+inline fun JavaFile.Builder.`@interface`(className: ClassName, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.annotationBuilder(className)).build()!!
 
 fun TypeSpec.Builder.constructor(vararg parameters: ParameterSpec.Builder,
-                                 methodSpecFunction: MethodSpec.Builder.() -> MethodSpec.Builder = { this })
+                                 methodSpecFunction: MethodMethod = { this })
         = addMethod(methodSpecFunction(MethodSpec.constructorBuilder()).addParameters(parameters.map { it.build() }
         .toMutableList()).build())!!
 
 fun TypeSpec.Builder.abstract(returnClass: ClassName, name: String,
                               vararg parameters: ParameterSpec.Builder,
-                              methodSpecFunction: MethodSpec.Builder.() -> MethodSpec.Builder = { this })
+                              methodSpecFunction: MethodMethod = { this })
         = addMethod(methodSpecFunction(MethodSpec.methodBuilder(name))
         .addModifiers(Modifier.ABSTRACT)
         .addParameters(parameters.map { it.build() }
@@ -86,11 +86,18 @@ fun TypeSpec.Builder.abstract(returnClass: ClassName, name: String,
 
 fun TypeSpec.Builder.abstract(returnType: KClass<*>, name: String,
                               vararg parameters: ParameterSpec.Builder,
-                              methodSpecFunction: MethodSpec.Builder.() -> MethodSpec.Builder = { this })
+                              methodSpecFunction: MethodMethod = { this })
         = addMethod(methodSpecFunction(MethodSpec.methodBuilder(name))
         .addModifiers(Modifier.ABSTRACT)
         .addParameters(parameters.map { it.build() }
                 .toMutableList())
         .returns(returnType)
         .build())!!
+
+fun TypeSpec.Builder.case(name: String) = addEnumConstant(name)!!
+
+fun TypeSpec.Builder.case(name: String, function: TypeMethod) = addEnumConstant(name, function().build())!!
+
+fun TypeSpec.Builder.case(name: String, parameter: String, vararg args: Any?, function: TypeMethod = { this })
+        = addEnumConstant(name, TypeSpec.anonymousClassBuilder(parameter, *args).function().build())!!
 
