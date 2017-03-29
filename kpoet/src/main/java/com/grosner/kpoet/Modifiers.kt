@@ -38,27 +38,26 @@ val `abstract`
 val `public abstract`
     get() = listOf(PUBLIC, ABSTRACT)
 
-fun `package private`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
-                      codeMethod: MethodMethod = { this })
+fun `fun`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
+          codeMethod: MethodMethod = { this })
         = applyParams(packagePrivate, type, name, params = *params, function = codeMethod)
 
-fun `package private`(type: TypeName, name: String, vararg params: ParameterSpec.Builder,
-                      codeMethod: MethodMethod = { this })
+fun `fun`(type: TypeName, name: String, vararg params: ParameterSpec.Builder,
+          codeMethod: MethodMethod = { this })
         = applyParams(packagePrivate, type, name, params = *params, function = codeMethod)
 
-fun TypeSpec.Builder.`package private`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
-                                       codeMethod: MethodMethod = { this })
+fun TypeSpec.Builder.`fun`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
+                           codeMethod: MethodMethod = { this })
         = addMethod(applyParams(packagePrivate, type, name, params = *params, function = codeMethod))!!
 
-fun TypeSpec.Builder.`package private`(type: TypeName, name: String, vararg params: ParameterSpec.Builder,
-                                       codeMethod: MethodMethod = { this })
+fun TypeSpec.Builder.`fun`(type: TypeName, name: String, vararg params: ParameterSpec.Builder,
+                           codeMethod: MethodMethod = { this })
         = addMethod(applyParams(packagePrivate, type, name, params = *params, function = codeMethod))!!
 
-
-fun TypeSpec.Builder.`package private field`(type: KClass<*>, name: String, codeMethod: FieldMethod = { this })
+fun TypeSpec.Builder.`field`(type: KClass<*>, name: String, codeMethod: FieldMethod = { this })
         = addField(applyFieldParams(packagePrivate, type, name, codeMethod))!!
 
-fun TypeSpec.Builder.`package private field`(type: TypeName, name: String, codeMethod: FieldMethod = { this })
+fun TypeSpec.Builder.`field`(type: TypeName, name: String, codeMethod: FieldMethod = { this })
         = addField(applyFieldParams(packagePrivate, type, name, codeMethod))!!
 
 fun `private`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,

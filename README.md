@@ -163,7 +163,7 @@ void main() {
 
 ```
 
-And so JavaPoet verbously gives us this `MethodSpec`:
+And so JavaPoet has us write this `MethodSpec`:
 
 ```java
 
@@ -176,13 +176,13 @@ MethodSpec main = MethodSpec.methodBuilder("main")
 
 ```
 
- This is slightly difficult to read and understand. What does this code actually look like when it's outputted? Also note that if you `beginControlFlow()` multiple times and dont `endControlFlow()`, you will receive runtime crashes that are hard to fix depending on implementation.
+ This is a simple example, but you have to think about what the code will look like when it's generated. Also if you forget to provide a corresponding `endControlFlow()` for every `beginControlFlow()`, it will lead you to runtime crashes that can make it very difficult to diagnose.
 
  With KPoet, you do less thinking about how the code will look:
 
 ```kotlin
 
-`package private`(TypeName.VOID, "main") {
+`fun`(TypeName.VOID, "main") {
   statement("int total = 0")
   `for`("int i = 0; i < 10; i++") {
     statement("total += i")
@@ -207,11 +207,12 @@ private MethodSpec computeRange(String name, int from, int to, String op) {
 
 ```
 
-In KPoet:
+In KPoet in combination with Kotlin string concatenation:
 
 ```kotlin
 
-fun computeRange(name: String, from: Int, to:Int, op: String) = `package private`(TypeName.Int, name) {
+`fun`(TypeName.Int, param(String::class, name), param(int.class, from),
+  param(int.class, to), param(String::class, op)) {
   statement("int result = 0")
   `for`("int i = $from; i < $to; i++") {
     statement("result = result $op i")
@@ -277,8 +278,8 @@ You will still need to pass that class or `TypeName` to JavaPoet:
 ```kotlin
 
 `abstract class`("TestClass") {  modifiers(public)
-    `package private field`(TypeName.BOOLEAN, isReady, { `=`(false.L) })
-    `package private field`(String::class, isReady, { `=`("SomeName".S) })
+    field(TypeName.BOOLEAN, isReady, { `=`(false.L) })
+    field(String::class, isReady, { `=`("SomeName".S) })
 
     constructor(param(TypeName.BOOLEAN, isReady)) {
         statement("this.$isReady = $isReady")
@@ -356,7 +357,7 @@ Parameters are done via global methods:
 
 ```kotlin
 
-`package private`(TypeName.VOID, "welcomeOverlords",
+`fun`(TypeName.VOID, "welcomeOverlords",
   `final param`(String::class, "android"),)
   `final param`(String::class, "robot")
 
@@ -373,7 +374,7 @@ To add annotations to parameters, simply call:
 
 ```kotlin
 
-`package private`(TypeName.VOID, "welcomeOverlords",
+`fun`(TypeName.VOID, "welcomeOverlords",
   `final param`(`@`(TestAnnotation::class), String::class, "android"),)
   `final param`(`@`(TestAnnotation::class, {
                     this["name"] = "Some Kind of Member".S
@@ -448,7 +449,7 @@ public enum Roshambo {
 We write a method that contains a class that contains a method:
 
 ```kotlin
-`package private`(TypeName.VOID, "sortByLength", param(parameterized<String>(List::class), "strings")) {
+`fun`(TypeName.VOID, "sortByLength", param(parameterized<String>(List::class), "strings")) {
   statement("\$T.sort(strings, \$L)", Collections::class.java, `anonymous class`("") {
     extends(parameterized<String>(Comparator::class))
     `public`(TypeName.INT, "compare", param(String::class, "a"), param(String::class, "b")) {
@@ -504,7 +505,7 @@ On fields:
 
 ```kotlin
 
-`package private field`(TypeName.BOOLEAN, isReady) {
+field(TypeName.BOOLEAN, isReady) {
   `@`(Override::class)
   `=`(false.L)
 }
