@@ -8,35 +8,17 @@ import kotlin.reflect.KClass
 val packagePrivate
     get() = listOf<Modifier>()
 
-val publicFinal
-    get() = listOf(PUBLIC, FINAL)
+val public = PUBLIC
 
-val publicStatic
-    get() = listOf(PUBLIC, STATIC)
+val private = PRIVATE
 
-val publicStaticFinal
-    get() = listOf(PUBLIC, STATIC, FINAL)
+val protected = PROTECTED
 
-val `public`
-    get() = listOf(PUBLIC)
+val abstract = ABSTRACT
 
-val `private`
-    get() = listOf(PRIVATE)
+val static = STATIC
 
-val `privateFinal`
-    get() = listOf(PRIVATE, FINAL)
-
-val `privateStaticFinal`
-    get() = listOf(PRIVATE, STATIC, FINAL)
-
-val `protected`
-    get() = listOf(PROTECTED)
-
-val `abstract`
-    get() = listOf(ABSTRACT)
-
-val `public abstract`
-    get() = listOf(PUBLIC, ABSTRACT)
+val final = FINAL
 
 fun `fun`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
           codeMethod: MethodMethod = { this })
@@ -85,94 +67,94 @@ fun TypeSpec.Builder.`private field`(type: TypeName, name: String, codeMethod: F
 
 fun `private final`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
                     codeMethod: MethodMethod = { this })
-        = applyParams(privateFinal, type, name, params = *params, function = codeMethod)
+        = applyParams(listOf(private, final), type, name, params = *params, function = codeMethod)
 
 fun `private final`(type: TypeName, name: String, vararg params: ParameterSpec.Builder,
                     codeMethod: MethodMethod = { this })
-        = applyParams(privateFinal, type, name, params = *params, function = codeMethod)
+        = applyParams(listOf(private, final), type, name, params = *params, function = codeMethod)
 
 fun TypeSpec.Builder.`private final`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
                                      codeMethod: MethodMethod = { this })
-        = addMethod(applyParams(privateFinal, type, name, params = *params, function = codeMethod))!!
+        = addMethod(applyParams(listOf(private, final), type, name, params = *params, function = codeMethod))!!
 
 fun TypeSpec.Builder.`private final`(type: TypeName, name: String, vararg params: ParameterSpec.Builder,
                                      codeMethod: MethodMethod = { this })
-        = addMethod(applyParams(privateFinal, type, name, params = *params, function = codeMethod))!!
+        = addMethod(applyParams(listOf(private, final), type, name, params = *params, function = codeMethod))!!
 
 fun TypeSpec.Builder.`private final field`(type: KClass<*>, name: String, codeMethod: FieldMethod = { this })
-        = addField(applyFieldParams(privateFinal, type, name, codeMethod))!!
+        = addField(applyFieldParams(listOf(private, final), type, name, codeMethod))!!
 
 fun TypeSpec.Builder.`private final field`(type: TypeName, name: String, codeMethod: FieldMethod = { this })
-        = addField(applyFieldParams(privateFinal, type, name, codeMethod))!!
+        = addField(applyFieldParams(listOf(private, final), type, name, codeMethod))!!
 
 fun `private static final`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
                            codeMethod: MethodMethod = { this })
-        = applyParams(privateStaticFinal, type, name, params = *params, function = codeMethod)
+        = applyParams(listOf(private, static, final), type, name, params = *params, function = codeMethod)
 
 fun `private static final`(type: TypeName, name: String, vararg params: ParameterSpec.Builder,
                            codeMethod: MethodMethod = { this })
-        = applyParams(privateStaticFinal, type, name, params = *params, function = codeMethod)
+        = applyParams(listOf(private, static, final), type, name, params = *params, function = codeMethod)
 
 fun TypeSpec.Builder.`private static final`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
                                             codeMethod: MethodMethod = { this })
-        = addMethod(applyParams(privateStaticFinal, type, name, params = *params, function = codeMethod))!!
+        = addMethod(applyParams(listOf(private, static, final), type, name, params = *params, function = codeMethod))!!
 
 fun TypeSpec.Builder.`private static final`(type: TypeName, name: String, vararg params: ParameterSpec.Builder,
                                             codeMethod: MethodMethod = { this })
-        = addMethod(applyParams(privateStaticFinal, type, name, params = *params, function = codeMethod))!!
+        = addMethod(applyParams(listOf(private, static, final), type, name, params = *params, function = codeMethod))!!
 
 
 fun TypeSpec.Builder.`private static final field`(type: KClass<*>, name: String, codeMethod: FieldMethod = { this })
-        = addField(applyFieldParams(privateStaticFinal, type, name, codeMethod))!!
+        = addField(applyFieldParams(listOf(private, static, final), type, name, codeMethod))!!
 
 fun TypeSpec.Builder.`private static final field`(type: TypeName, name: String, codeMethod: FieldMethod = { this })
-        = addField(applyFieldParams(privateStaticFinal, type, name, codeMethod))!!
+        = addField(applyFieldParams(listOf(private, static, final), type, name, codeMethod))!!
 
 fun `public static`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
                     codeMethod: MethodMethod = { this })
-        = applyParams(publicStatic, type, name, params = *params, function = codeMethod)
+        = applyParams(listOf(public, static), type, name, params = *params, function = codeMethod)
 
 fun `public static`(type: TypeName, name: String, vararg params: ParameterSpec.Builder,
                     codeMethod: MethodMethod = { this })
-        = applyParams(publicStatic, type, name, params = *params, function = codeMethod)
+        = applyParams(listOf(public, static), type, name, params = *params, function = codeMethod)
 
 fun TypeSpec.Builder.`public static`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
                                      codeMethod: MethodMethod = { this })
-        = addMethod(applyParams(publicStatic, type, name, params = *params, function = codeMethod))!!
+        = addMethod(applyParams(listOf(public, static), type, name, params = *params, function = codeMethod))!!
 
 fun TypeSpec.Builder.`public static`(type: TypeName, name: String, vararg params: ParameterSpec.Builder,
                                      codeMethod: MethodMethod = { this })
-        = addMethod(applyParams(publicStatic, type, name, params = *params, function = codeMethod))!!
+        = addMethod(applyParams(listOf(public, static), type, name, params = *params, function = codeMethod))!!
 
 
 fun TypeSpec.Builder.`public static field`(type: KClass<*>, name: String, codeMethod: FieldMethod = { this })
-        = addField(applyFieldParams(publicStatic, type, name, codeMethod))!!
+        = addField(applyFieldParams(listOf(public, static), type, name, codeMethod))!!
 
 fun TypeSpec.Builder.`public static field`(type: TypeName, name: String, codeMethod: FieldMethod = { this })
-        = addField(applyFieldParams(publicStatic, type, name, codeMethod))!!
+        = addField(applyFieldParams(listOf(public, static), type, name, codeMethod))!!
 
 fun `public static final`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
                           codeMethod: MethodMethod = { this })
-        = applyParams(publicStaticFinal, type, name, params = *params, function = codeMethod)
+        = applyParams(listOf(public, static, final), type, name, params = *params, function = codeMethod)
 
 fun `public static final`(type: TypeName, name: String, vararg params: ParameterSpec.Builder,
                           codeMethod: MethodMethod = { this })
-        = applyParams(publicStaticFinal, type, name, params = *params, function = codeMethod)
+        = applyParams(listOf(public, static, final), type, name, params = *params, function = codeMethod)
 
 fun TypeSpec.Builder.`public static final`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
                                            codeMethod: MethodMethod = { this })
-        = addMethod(applyParams(publicStaticFinal, type, name, params = *params, function = codeMethod))!!
+        = addMethod(applyParams(listOf(public, static, final), type, name, params = *params, function = codeMethod))!!
 
 fun TypeSpec.Builder.`public static final`(type: TypeName, name: String, vararg params: ParameterSpec.Builder,
                                            codeMethod: MethodMethod = { this })
-        = addMethod(applyParams(publicStaticFinal, type, name, params = *params, function = codeMethod))!!
+        = addMethod(applyParams(listOf(public, static, final), type, name, params = *params, function = codeMethod))!!
 
 
 fun TypeSpec.Builder.`public static final field`(type: KClass<*>, name: String, codeMethod: FieldMethod = { this })
-        = addField(applyFieldParams(publicStaticFinal, type, name, codeMethod))!!
+        = addField(applyFieldParams(listOf(public, static, final), type, name, codeMethod))!!
 
 fun TypeSpec.Builder.`public static final field`(type: TypeName, name: String, codeMethod: FieldMethod = { this })
-        = addField(applyFieldParams(publicStaticFinal, type, name, codeMethod))!!
+        = addField(applyFieldParams(listOf(public, static, final), type, name, codeMethod))!!
 
 fun `public`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
              codeMethod: MethodMethod = { this })

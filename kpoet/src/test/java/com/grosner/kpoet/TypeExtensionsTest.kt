@@ -19,7 +19,7 @@ class TypeExtensionsTest : Spek({
     describe("type extensions") {
         on("can create a class with a method that sums two numbers with if else branches") {
             val typeSpec = `class`("TestClass") {
-                modifiers(publicFinal)
+                modifiers(public, final)
 
                 `public`(String::class, "doGood") {
                     statement("\$T a = 1", TypeName.INT)

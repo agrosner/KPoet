@@ -15,7 +15,8 @@ fun TypeSpec.Builder.implements(vararg type: Type) = apply { type.forEach { addS
 
 fun TypeSpec.Builder.modifiers(vararg modifier: Modifier) = addModifiers(*modifier)!!
 
-fun TypeSpec.Builder.modifiers(modifiers: Collection<Modifier>) = addModifiers(*modifiers.toTypedArray())!!
+fun TypeSpec.Builder.modifiers(vararg modifiers: List<Modifier>)
+        = apply { modifiers.forEach { addModifiers(*it.toTypedArray()) } }
 
 infix fun TypeSpec.Builder.annotation(type: KClass<*>) = addAnnotation(type.java)!!
 
@@ -30,22 +31,31 @@ inline fun TypeSpec.Builder.annotation(className: KClass<*>,
         = addAnnotation(AnnotationSpec.builder(className.java).function().build())!!
 
 inline fun `class`(className: String, typeSpecFunc: TypeMethod)
-        = typeSpecFunc(TypeSpec.classBuilder(className)).build()!!
+        = TypeSpec.classBuilder(className).typeSpecFunc().build()!!
 
 inline fun `interface`(className: String, typeSpecFunc: TypeMethod)
-        = typeSpecFunc(TypeSpec.interfaceBuilder(className)).build()!!
+        = TypeSpec.interfaceBuilder(className).typeSpecFunc().build()!!
 
 inline fun `abstract class`(className: String, typeSpecFunc: TypeMethod)
-        = typeSpecFunc(TypeSpec.classBuilder(className)).addModifiers(Modifier.ABSTRACT).build()!!
+        = TypeSpec.classBuilder(className).typeSpecFunc().modifiers(abstract).build()!!
+
+inline fun `public abstract class`(className: String, typeSpecFunc: TypeMethod)
+        = TypeSpec.classBuilder(className).typeSpecFunc().modifiers(public, abstract).build()!!
 
 inline fun `public class`(className: String, typeSpecFunc: TypeMethod)
-        = typeSpecFunc(TypeSpec.classBuilder(className)).addModifiers(Modifier.PUBLIC).build()!!
+        = TypeSpec.classBuilder(className).typeSpecFunc().modifiers(public).build()!!
+
+inline fun `public final class`(className: String, typeSpecFunc: TypeMethod)
+        = typeSpecFunc(TypeSpec.classBuilder(className)).modifiers(public, final).build()!!
 
 inline fun `final class`(className: String, typeSpecFunc: TypeMethod)
-        = typeSpecFunc(TypeSpec.classBuilder(className)).addModifiers(Modifier.FINAL).build()!!
+        = TypeSpec.classBuilder(className).typeSpecFunc().modifiers(final).build()!!
 
 inline fun `enum`(className: String, typeSpecFunc: TypeMethod)
-        = typeSpecFunc(TypeSpec.enumBuilder(className)).build()!!
+        = TypeSpec.enumBuilder(className).typeSpecFunc().build()!!
+
+inline fun `public enum`(className: String, typeSpecFunc: TypeMethod)
+        = TypeSpec.enumBuilder(className).typeSpecFunc().modifiers(public).build()!!
 
 inline fun `anonymous class`(typeArgumentsFormat: String, vararg args: Any?,
                              typeSpecFunc: TypeMethod)
@@ -53,6 +63,9 @@ inline fun `anonymous class`(typeArgumentsFormat: String, vararg args: Any?,
 
 inline fun `@interface`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.annotationBuilder(className)).build()!!
+
+inline fun `public @interface`(className: String, typeSpecFunc: TypeMethod)
+        = typeSpecFunc(TypeSpec.annotationBuilder(className)).modifiers(public).build()!!
 
 fun TypeSpec.Builder.constructor(vararg parameters: ParameterSpec.Builder,
                                  methodSpecFunction: MethodMethod = { this })
