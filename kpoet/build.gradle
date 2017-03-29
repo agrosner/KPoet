@@ -1,8 +1,9 @@
 apply plugin: 'java'
 apply plugin: 'kotlin'
 
+project.ext.artifactId = bt_name
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile 'com.squareup:javapoet:1.8.0'
 
@@ -12,5 +13,8 @@ dependencies {
     testCompile 'org.junit.platform:junit-platform-runner:1.0.0-M3'
 }
 
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+
+apply from: '../kotlin-artifacts.gradle'
