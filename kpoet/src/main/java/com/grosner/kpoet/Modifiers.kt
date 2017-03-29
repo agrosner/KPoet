@@ -32,6 +32,12 @@ val `privateStaticFinal`
 val `protected`
     get() = listOf(PROTECTED)
 
+val `abstract`
+    get() = listOf(ABSTRACT)
+
+val `public abstract`
+    get() = listOf(PUBLIC, ABSTRACT)
+
 fun `package private`(type: KClass<*>, name: String, vararg params: ParameterSpec.Builder,
                       codeMethod: MethodMethod = { this })
         = applyParams(packagePrivate, type, name, params = *params, function = codeMethod)

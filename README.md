@@ -455,3 +455,98 @@ void sortByLength(List<String> strings) {
 }
 
 ```
+
+#### Annotations
+
+Simple annotations are easy, just use the "\`@()\`" method within classes, functions, fields or parameters:
+
+On methods:
+```Kotlin
+
+`public`(String::class, "toString") {
+  `@`(Override::class)
+  `return`("Hoverboard".S)
+}
+
+```
+
+on Classes:
+
+```kotlin
+
+`public class`("User") {
+  `@`(Override::class) // annotations have to be within the class block, otherwise we can't associate it with a `class`
+
+}
+
+```
+
+On fields:
+
+```kotlin
+
+`package private field`(TypeName.BOOLEAN, isReady) {
+  `@`(Override::class)
+  `=`(false.L)
+}
+
+```
+
+on parameters:
+
+
+```kotlin
+
+`private`(TypeName.VOID, "someMethod",
+            `final param`(`@`(NonNull::class), String::class, "someParameter")) {
+
+            }
+
+```
+
+On more complicated cases, say for a class:
+```kotlin
+`public class`("User") {
+  extends(Object::class)
+  `@`(Headers::class, {
+      this["accept"] = "application/json; charset=utf-8".S
+      this["userAgent"] = "Square Cash".S
+    })
+
+}
+```
+
+It generates:
+
+```java
+
+@Headers(
+    accept = "application/json; charset=utf-8",
+    userAgent = "Square Cash"
+)
+public class User extends Object {
+};
+
+```
+
+For nested annotations:
+
+```kotlin
+
+`public`(LogReceipt::class, "recordEvent", param(LogRecord::class, "logRecord")) {
+  modifiers(abstract)
+  `@`(HeaderList::class) {
+    member("value", `@`(Header::class, mapFunc = {
+      this["name"] = "Accept".S
+      this["value"] = "application/json; charset=utf-8".S
+    }).L)
+    member("value", `@`(Header::class, mapFunc = {
+      this["name"] = "User-Agent".S
+      this["value"] = "Square Cash".S
+    }).L)
+  }
+}
+
+```
+
+#### JavaDoc

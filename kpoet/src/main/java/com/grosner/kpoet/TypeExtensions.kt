@@ -38,6 +38,9 @@ inline fun `interface`(className: String, typeSpecFunc: TypeMethod)
 inline fun `abstract class`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.classBuilder(className)).addModifiers(Modifier.ABSTRACT).build()!!
 
+inline fun `public class`(className: String, typeSpecFunc: TypeMethod)
+        = typeSpecFunc(TypeSpec.classBuilder(className)).addModifiers(Modifier.PUBLIC).build()!!
+
 inline fun `final class`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.classBuilder(className)).addModifiers(Modifier.FINAL).build()!!
 
@@ -45,7 +48,7 @@ inline fun `enum`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.enumBuilder(className)).build()!!
 
 inline fun `anonymous class`(typeArgumentsFormat: String, vararg args: Any?,
-                                              typeSpecFunc: TypeMethod)
+                             typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.anonymousClassBuilder(typeArgumentsFormat, *args)).build()!!
 
 inline fun `@interface`(className: String, typeSpecFunc: TypeMethod)

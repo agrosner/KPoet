@@ -10,6 +10,7 @@ import org.junit.platform.runner.JUnitPlatform
 import org.junit.runner.RunWith
 import java.io.Serializable
 
+
 /**
  * Description:
  */
@@ -56,8 +57,8 @@ class TypeExtensionsTest : Spek({
             val isReady = "isReady"
             val typeSpec = `abstract class`("TestClass") {
                 modifiers(public)
-                `package private field`(TypeName.BOOLEAN, isReady, { `=`(false.L) })
-                `package private field`(String::class, isReady, { `=`("SomeName".S) })
+                `package private field`(TypeName.BOOLEAN, isReady) { `=`(false.L) }
+                `package private field`(String::class, isReady) { `=`("SomeName".S) }
 
                 constructor(param(TypeName.BOOLEAN, isReady)) {
                     statement("this.$isReady = $isReady")
@@ -141,4 +142,5 @@ class TypeExtensionsTest : Spek({
         }
     }
 })
+
 

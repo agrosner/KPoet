@@ -1,6 +1,7 @@
 package com.grosner.kpoet
 
 import com.squareup.javapoet.*
+import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 typealias CodeMethod = CodeBlock.Builder.() -> CodeBlock.Builder
@@ -9,6 +10,10 @@ typealias FieldMethod = FieldSpec.Builder.() -> FieldSpec.Builder
 typealias ParamMethod = ParameterSpec.Builder.() -> ParameterSpec.Builder
 typealias AnnotationMethod = AnnotationSpec.Builder.() -> AnnotationSpec.Builder
 typealias TypeMethod = TypeSpec.Builder.() -> TypeSpec.Builder
+
+fun MethodSpec.Builder.modifiers(vararg modifier: Modifier) = addModifiers(*modifier)!!
+
+fun MethodSpec.Builder.modifiers(vararg modifiers: List<Modifier>) = apply { modifiers.forEach { addModifiers(it) } }
 
 infix fun MethodSpec.Builder.returns(typeName: TypeName) = returns(typeName)!!
 
@@ -95,3 +100,4 @@ inline fun MethodSpec.Builder.beginControl(name: String, statement: String = "",
 
 inline fun MethodSpec.Builder.endControl(name: String, statement: String = "", vararg args: Any?)
         = endControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)!!
+}
