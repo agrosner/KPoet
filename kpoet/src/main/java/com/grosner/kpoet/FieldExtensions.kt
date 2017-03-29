@@ -7,7 +7,7 @@ fun field(typeName: TypeName, name: String, fieldMethod: FieldMethod = { this })
         = FieldSpec.builder(typeName, name).fieldMethod()
 
 fun field(kClass: KClass<*>, name: String, fieldMethod: FieldMethod = { this })
-        = FieldSpec.builder(kClass.java, name)!!
+        = FieldSpec.builder(kClass.java, name).fieldMethod()
 
 fun field(annotationSpec: AnnotationSpec.Builder, typeName: TypeName, name: String, fieldMethod: FieldMethod = { this })
         = FieldSpec.builder(typeName, name).addAnnotation(annotationSpec.build()).fieldMethod()

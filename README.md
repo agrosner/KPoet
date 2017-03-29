@@ -125,6 +125,25 @@ We represent it as:
 
 ```
 
+## Download
+
+Including in your project:
+
+```gradle
+
+allProjects {
+  repositories {
+    // required to find the project's artifacts
+    maven { url "https://www.jitpack.io" }
+  }
+}
+```
+
+```gradle
+compile 'com.squareup:javapoet:1.8.0' // version of JavaPoet currently
+compile 'com.github.agrosner.KPoet:kpoet:1.0' // version of KPoet
+```
+
 The next few sections we attempt to mirror the JavaPoet readme, but converted syntax for KPoet, to give you an idea of what the library provides.
 
 
@@ -550,3 +569,40 @@ For nested annotations:
 ```
 
 #### JavaDoc
+
+To add JavaDoc to fields, methods, and types:
+
+```kotlin
+
+`public class`("SomeClass") {
+  javadoc("Javadoc goes here")
+
+  `private final field`(String::class, "someField") {
+    javadoc("This could be anything you want it to be")
+    `=`("SomeValue".S)
+  }
+}
+
+`public`(TypeName.VOID, "dismiss", param(Message::class, "message")) {
+  javadoc("Hides {@code message} from the caller's history. Other\n"
+        + "participants in the conversation will continue to see the\n"
+        + "message in their own history unless they also delete it.\n")
+  javadoc("\n")
+  javadoc("<p>Use {@link #delete($T)} to delete the entire\n"
+        + "conversation for all participants.\n", Conversation.class)
+}
+
+
+
+```
+
+## Pull Requests
+I welcome and encourage all pull requests. It usually will take me within 24-48 hours to respond to any issue or request. Here are some basic rules to follow to ensure timely addition of your request:
+  1. Match coding style (braces, spacing, etc.) This is best achieved using CMD+Option+L (Reformat code) on Mac (not sure for Windows) with Android Studio defaults.
+  2. If its a feature, bugfix, or anything please only change code to what you specify.
+  3. Please keep PR titles easy to read and descriptive of changes, this will make them easier to merge :)
+  4. Pull requests _must_ be made against `develop` branch. Any other branch (unless specified by the maintainers) will get rejected.
+  5. Have fun!
+
+## Maintained By
+[agrosner](https://github.com/agrosner) ([@agrosner](https://www.twitter.com/agrosner))
