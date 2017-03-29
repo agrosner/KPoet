@@ -1,8 +1,7 @@
 # KPoet
 
-KPoet is a Kotlin extensions library on top of [JavaPoet](https://github.com/square/javapoet) that helps you write code that writes code _feel_ like actually writing code.
-
-From their main [Example](https://github.com/square/javapoet#example):
+KPoet is a Kotlin extensions library on top of [JavaPoet](https://github.com/square/javapoet) that helps you write code generators / annotation processors that _feel_ like actually writing Java code directly. It provides a Kotlin DSL syntax that resembles real java code as much as possible.
+Also it attempts to make the code generator writing clear as writing native java code itself.
 
 Here's a (boring) `HelloWorld` class:
 
@@ -17,7 +16,7 @@ public final class HelloWorld {
 
 ```
 
-And this is the (exciting) code to generate it with JavaPoet:
+Is represented in JavaPoet like:
 
 ```java
 
@@ -41,14 +40,14 @@ javaFile.writeTo(System.out);
 ```
 
 While JavaPoet provides a very nice library that makes it easier to write code that writes Java code, there are a few problems with vanilla JavaPoet code:
-1. It is confusing why `MethodSpec` should get defined before writing your `TypeSpec`.
-2. The code ordering does not follow normal code flow, so you have to think about the ordering and map it to code.
-3. The code does not flow like how you would like to write code, leading to mistakes and making it more difficult to read when you need to generate complex code.
+1. The code is declared in reverse order. You define constructs that are nested inside larger ones (fields, methods, etc) first, then work your way up to the `JavaFile`.
+2. You have to think about how the code will look a lot (especially when it gets more complex), decreasing maintainability.
+3. No order enforced where you declare the spec properties, potentially leading to mistakes and can reduce readibility.
 
 `KPoet` attempts to solve these issues by:
-1. Mapping Kotlin DSL builders as close as possible to normal java code. (Yes it's quite possible)
-2. Have the code you write appear like normal Java, meaning less thinking and better readibility.
-3. Be more concise than JavaPoet so you can write less code but be more expressive.
+1. Providing Kotlin DSL extension builders that map closely to native Java code.
+2. Have the code you write for the generator resemble the Java output code closely and in the order you expect, providing both readibility and maintainability.
+3. Also, KPoet provides more concise methods and constructs that will reduce lines of code.
 
 So using `KPoet` from the previous example:
 
@@ -182,7 +181,7 @@ MethodSpec main = MethodSpec.methodBuilder("main")
 
 ```kotlin
 
-`fun`(TypeName.VOID, "main") {
+val main = `fun`(TypeName.VOID, "main") {
   statement("int total = 0")
   `for`("int i = 0; i < 10; i++") {
     statement("total += i")
@@ -191,38 +190,13 @@ MethodSpec main = MethodSpec.methodBuilder("main")
 
 ```
 
-Next from their method generator example:
-```java
+do..while:
 
-private MethodSpec computeRange(String name, int from, int to, String op) {
-  return MethodSpec.methodBuilder(name)
-      .returns(int.class)
-      .addStatement("int result = 0")
-      .beginControlFlow("for (int i = " + from + "; i < " + to + "; i++)")
-      .addStatement("result = result " + op + " i")
-      .endControlFlow()
-      .addStatement("return result")
-      .build();
-}
+`do` {
+  statement("i++")
+}.`while`("sum < 20")
 
-```
-
-In KPoet in combination with Kotlin string concatenation:
-
-```kotlin
-
-`fun`(TypeName.Int, param(String::class, name), param(int.class, from),
-  param(int.class, to), param(String::class, op)) {
-  statement("int result = 0")
-  `for`("int i = $from; i < $to; i++") {
-    statement("result = result $op i")
-  }
-  `return`("result")
-}
-
-```
-
-### $L for Literals
+### Literals
 
 KPoet has a couple helper methods for cases where we need to pass a literal value to a statement, or code block. The best example is `return`.
 
@@ -238,7 +212,7 @@ can easily be replaced with:
 
 This simply converts the object to string, but preserving the JavaPoet-like syntax.
 
-### $S is for Strings
+### Strings
 
 When using code that includes string literals, JavaPoet uses `$S` to emit a `string`, wrapping quotation marks to escape it.
 
@@ -248,7 +222,7 @@ With the power of Kotlin string interpolation, we barely need to use $S. For cas
 
 `public`(String::class, "getStatus", param(TypeName.BOOLEAN, "isReady")) {
   `if`("isReady") {
-    `return`("BONUS".S)
+    `return`("BONUS".S) // if we don't use .S, it's outputted as a literal.
   } else {
     `return`("NO BONUS".S)
   }
@@ -269,11 +243,12 @@ public String getStatus(boolean isReady) {
 }
 
 ```
-### $T is for Types
+
+### Types
 
 JavaPoet has spectacular handling of reference types by collecting and importing them to make the code much more readable, KPoet does not provide any extension on top of this functionality.
 
-You will still need to pass that class or `TypeName` to JavaPoet:
+You will still need to pass that `Class` or `TypeName` to JavaPoet:
 
 ```kotlin
 
@@ -288,10 +263,12 @@ You will still need to pass that class or `TypeName` to JavaPoet:
 
 ```
 
+__Be careful__: this library does not convert `KClass<*>` to `Class<*>` in string interpolation with "\$T". However, most of places where `Class` is used in `JavaPoet` we provide the `KClass` version of that.
+
 #### Import Static
 
 `KPoet` supports `import static` pretty easily. When constructing a `JavaFile`,
-pass them as the second parameter in the method:
+pass them as the second parameter in the `javaFile` method:
 ```kotlin
 
 val file = javaFile("com.grosner", {
@@ -306,11 +283,7 @@ val file = javaFile("com.grosner", {
 
 ```
 
-Unfortunately `JavaPoet` does not allow adding them _until_ after the `JavaFile.Builder` is constructed,
-making it nearly impossible to place it in the same block as the `class`.
-
 #### Methods
-
 
 KPoet supports all kinds of methods.
 
@@ -377,7 +350,7 @@ To add annotations to parameters, simply call:
 `fun`(TypeName.VOID, "welcomeOverlords",
   `final param`(`@`(TestAnnotation::class), String::class, "android"),)
   `final param`(`@`(TestAnnotation::class, {
-                    this["name"] = "Some Kind of Member".S
+                    this["name"] = "Some Kind of Member".S // we use a map to construct the properties here.
                     this["purpose"] = "Some Purpose we have".S
                 }, String::class, "robot")
 ```
@@ -518,9 +491,7 @@ on parameters:
 ```kotlin
 
 `private`(TypeName.VOID, "someMethod",
-            `final param`(`@`(NonNull::class), String::class, "someParameter")) {
-
-            }
+  `final param`(`@`(NonNull::class), String::class, "someParameter"))
 
 ```
 

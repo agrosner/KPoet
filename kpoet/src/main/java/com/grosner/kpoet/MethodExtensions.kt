@@ -46,9 +46,8 @@ inline fun MethodSpec.Builder.`if`(statement: String, vararg args: Any?,
                                    function: MethodMethod)
         = beginControl("if", statement = statement, args = *args, function = function)
 
-inline fun MethodSpec.Builder.`do`(statement: String, vararg args: Any?,
-                                   function: MethodMethod)
-        = beginControl("do", statement = statement, args = *args, function = function)
+inline fun MethodSpec.Builder.`do`(function: MethodMethod)
+        = beginControl("do", function = function)
 
 fun MethodSpec.Builder.`while`(statement: String, vararg args: Any?) = endControl("while", statement = statement, args = *args)
 

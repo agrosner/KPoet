@@ -96,7 +96,8 @@ class MethodExtensionsTest : Spek({
 
         on("do while loops") {
             val method = `private`(TypeName.VOID, "doWhile") {
-                `do`("i++") {
+                `do` {
+                    statement("i++")
                     `if`("i == 5") {
                         `break`()
                     }.end()
@@ -104,7 +105,8 @@ class MethodExtensionsTest : Spek({
             }
             println(method.toString())
             assertEquals("private void doWhile() {\n" +
-                    "  do (i++) {\n" +
+                    "  do {\n" +
+                    "    i++;\n" +
                     "    if (i == 5) {\n" +
                     "      break;\n" +
                     "    }\n" +

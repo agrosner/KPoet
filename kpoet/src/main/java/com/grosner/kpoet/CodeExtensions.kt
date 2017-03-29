@@ -27,9 +27,8 @@ inline fun CodeBlock.Builder.`if`(statement: String, vararg args: Any?,
                                   function: CodeMethod)
         = beginControl("if", statement = statement, args = *args, function = function)
 
-inline fun CodeBlock.Builder.`do`(statement: String, vararg args: Any?,
-                                  function: CodeMethod)
-        = beginControl("do", statement = statement, args = *args, function = function)
+inline fun CodeBlock.Builder.`do`(function: CodeMethod)
+        = beginControl("do", function = function)
 
 fun CodeBlock.Builder.`while`(statement: String, vararg args: Any?) = endControl("while", statement = statement, args = *args)
 
