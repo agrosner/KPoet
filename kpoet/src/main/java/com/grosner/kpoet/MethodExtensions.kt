@@ -43,31 +43,31 @@ inline fun MethodSpec.Builder.annotation(className: KClass<*>,
 
 // control flow extensions
 inline fun MethodSpec.Builder.`if`(statement: String, vararg args: Any?,
-                                   function: CodeMethod)
+                                   function: MethodMethod)
         = beginControl("if", statement = statement, args = *args, function = function)
 
 inline fun MethodSpec.Builder.`do`(statement: String, vararg args: Any?,
-                                   function: CodeMethod)
+                                   function: MethodMethod)
         = beginControl("do", statement = statement, args = *args, function = function)
 
 fun MethodSpec.Builder.`while`(statement: String, vararg args: Any?) = endControl("while", statement = statement, args = *args)
 
-infix inline fun MethodSpec.Builder.`else`(function: CodeMethod)
+infix inline fun MethodSpec.Builder.`else`(function: MethodMethod)
         = nextControl("else", function = function)
 
 inline fun MethodSpec.Builder.`else if`(statement: String, vararg args: Any?,
-                                        function: CodeMethod)
+                                        function: MethodMethod)
         = nextControl("else if", statement = statement, args = *args, function = function)
 
 fun MethodSpec.Builder.end(statement: String = "", vararg args: Any?)
         = (if (statement.isNullOrBlank().not()) endControlFlow(statement, *args) else endControlFlow())!!
 
 inline fun MethodSpec.Builder.`for`(statement: String, vararg args: Any?,
-                                    function: CodeMethod)
+                                    function: MethodMethod)
         = beginControl("for", statement = statement, args = *args, function = function).endControlFlow()!!
 
 inline fun MethodSpec.Builder.`switch`(statement: String, vararg args: Any?,
-                                       function: CodeMethod)
+                                       function: MethodMethod)
         = beginControl("switch", statement = statement, args = *args, function = function).endControlFlow()!!
 
 fun MethodSpec.Builder.`return`(statement: String, vararg args: Any?) = addStatement("return $statement", *args)!!
@@ -75,6 +75,12 @@ fun MethodSpec.Builder.`return`(statement: String, vararg args: Any?) = addState
 fun MethodSpec.Builder.`break`() = addStatement("break")!!
 
 fun MethodSpec.Builder.`continue`() = addStatement("continue")!!
+
+inline fun MethodSpec.Builder.case(statement: String, vararg args: Any, function: MethodMethod)
+        = beginControlFlow("case $statement:", args).function().endControlFlow()!!
+
+inline fun MethodSpec.Builder.default(function: MethodMethod)
+        = beginControlFlow("default:").function().endControlFlow()!!
 
 fun MethodSpec.Builder.`throw new`(type: KClass<*>, statement: String, vararg arg: Any?)
         = addStatement("throw new \$T(\"$statement\")", type.java, *arg)!!
@@ -89,14 +95,14 @@ fun MethodSpec.Builder.`@`(className: ClassName, annotationMethod: AnnotationMet
         = addAnnotation(AnnotationSpec.builder(className).annotationMethod().build())!!
 
 inline fun MethodSpec.Builder.nextControl(name: String, statement: String = "", vararg args: Any?,
-                                          function: CodeMethod)
+                                          function: MethodMethod)
         = nextControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)
-        .addCode(function(CodeBlock.builder()).build())!!
+        .function()
 
 inline fun MethodSpec.Builder.beginControl(name: String, statement: String = "", vararg args: Any?,
-                                           function: CodeMethod)
+                                           function: MethodMethod)
         = beginControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)
-        .addCode(function(CodeBlock.builder()).build())!!
+        .function()
 
 inline fun MethodSpec.Builder.endControl(name: String, statement: String = "", vararg args: Any?)
         = endControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)!!

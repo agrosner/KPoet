@@ -2,16 +2,16 @@ package com.grosner.kpoet
 
 import com.squareup.javapoet.CodeBlock
 
-inline fun CodeBlock.Builder.case(statement: String, vararg args: Any, function: CodeBlock.Builder.() -> CodeBlock.Builder)
+inline fun CodeBlock.Builder.case(statement: String, vararg args: Any, function: CodeMethod)
         = beginControlFlow("case $statement:", args).function().endControlFlow()!!
 
-inline fun CodeBlock.Builder.default(function: CodeBlock.Builder.() -> CodeBlock.Builder)
+inline fun CodeBlock.Builder.default(function: CodeMethod)
         = beginControlFlow("default:").function().endControlFlow()!!
 
-inline fun CodeBlock.Builder.code(codeMethod: CodeBlock.Builder.() -> CodeBlock.Builder)
+inline fun CodeBlock.Builder.code(codeMethod: CodeMethod)
         = add(codeMethod(CodeBlock.builder()).build())!!
 
-inline fun CodeBlock.Builder.statement(codeMethod: CodeBlock.Builder.() -> CodeBlock.Builder)
+inline fun CodeBlock.Builder.statement(codeMethod: CodeMethod)
         = addStatement("\$L", codeMethod(CodeBlock.builder()).build().toString())!!
 
 fun CodeBlock.Builder.statement(code: String, vararg args: Any?) = addStatement(code, *args)!!
@@ -22,28 +22,28 @@ fun CodeBlock.Builder.end(statement: String = "", vararg args: Any?)
 
 // control flow extensions
 inline fun CodeBlock.Builder.`if`(statement: String, vararg args: Any?,
-                                  function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                  function: CodeMethod)
         = beginControl("if", statement = statement, args = *args, function = function)
 
 inline fun CodeBlock.Builder.`do`(statement: String, vararg args: Any?,
-                                  function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                  function: CodeMethod)
         = beginControl("do", statement = statement, args = *args, function = function)
 
 fun CodeBlock.Builder.`while`(statement: String, vararg args: Any?) = endControl("while", statement = statement, args = *args)
 
-inline infix fun CodeBlock.Builder.`else`(function: CodeBlock.Builder.() -> CodeBlock.Builder)
-        = nextControl("else", function = function)
+inline infix fun CodeBlock.Builder.`else`(function: CodeMethod)
+        = nextControl("else", function = function).end()
 
 inline fun CodeBlock.Builder.`else if`(statement: String, vararg args: Any?,
-                                       function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                       function: CodeMethod)
         = nextControl("else if", statement = statement, args = *args, function = function)
 
 inline fun CodeBlock.Builder.`for`(statement: String, vararg args: Any?,
-                                   function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                   function: CodeMethod)
         = beginControl("for", statement = statement, args = *args, function = function).endControlFlow()!!
 
 inline fun CodeBlock.Builder.`switch`(statement: String, vararg args: Any?,
-                                      function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                      function: CodeMethod)
         = beginControl("switch", statement = statement, args = *args, function = function).endControlFlow()!!
 
 fun CodeBlock.Builder.`return`(statement: String, vararg args: Any?) = addStatement("return $statement", *args)!!
@@ -53,12 +53,12 @@ fun CodeBlock.Builder.`break`() = addStatement("break")!!
 fun CodeBlock.Builder.`continue`() = addStatement("continue")!!
 
 inline fun CodeBlock.Builder.nextControl(name: String, statement: String = "", vararg args: Any?,
-                                         function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                         function: CodeMethod)
         = nextControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)
         .add(function(CodeBlock.builder()).build())!!
 
 inline fun CodeBlock.Builder.beginControl(name: String, statement: String = "", vararg args: Any?,
-                                          function: CodeBlock.Builder.() -> CodeBlock.Builder)
+                                          function: CodeMethod)
         = beginControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)
         .add(function(CodeBlock.builder()).build())!!
 

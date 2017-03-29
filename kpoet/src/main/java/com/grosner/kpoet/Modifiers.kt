@@ -171,7 +171,6 @@ fun TypeSpec.Builder.`public`(type: TypeName, name: String, vararg params: Param
                               codeMethod: MethodMethod = { this })
         = addMethod(applyParams(listOf(public), type, name, params = *params, function = codeMethod))!!
 
-
 fun TypeSpec.Builder.`public field`(type: KClass<*>, name: String, codeMethod: FieldMethod = { this })
         = addField(applyFieldParams(listOf(public), type, name, codeMethod))!!
 
