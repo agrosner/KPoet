@@ -378,7 +378,7 @@ We easily add fields to our `TypeSpec` definition:
 
 #### Enums
 
-use ``enum`()` to construct within a `javaFile`:
+use `enum()` to construct within a `javaFile`:
 
 ```kotlin
 
@@ -422,4 +422,36 @@ public enum Roshambo {
     this.handsign = handsign;
   }
 }
+```
+
+#### Anonymous Inner Classes
+
+We write a method that contains a class that contains a method:
+
+```kotlin
+`package private`(TypeName.VOID, "sortByLength", param(parameterized<String>(List::class), "strings")) {
+  statement("\$T.sort(strings, \$L)", Collections::class.java, `anonymous class`("") {
+    extends(parameterized<String>(Comparator::class))
+    `public`(TypeName.INT, "compare", param(String::class, "a"), param(String::class, "b")) {
+      `@`(Override::class)
+      `return`("a.length() - b.length()")
+    }
+  })
+}
+
+```
+
+Which generates:
+
+```java
+
+void sortByLength(List<String> strings) {
+  Collections.sort(strings, new Comparator<String>() {
+    @Override
+    public int compare(String a, String b) {
+      return a.length() - b.length();
+    }
+  });
+}
+
 ```

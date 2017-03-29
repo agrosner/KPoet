@@ -32,41 +32,23 @@ inline fun TypeSpec.Builder.annotation(className: KClass<*>,
 inline fun `class`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.classBuilder(className)).build()!!
 
-inline fun JavaFile.Builder.`class`(className: ClassName, typeSpecFunc: TypeMethod)
-        = typeSpecFunc(TypeSpec.classBuilder(className)).build()!!
-
 inline fun `interface`(className: String, typeSpecFunc: TypeMethod)
-        = typeSpecFunc(TypeSpec.interfaceBuilder(className)).build()!!
-
-inline fun JavaFile.Builder.`interface`(className: ClassName, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.interfaceBuilder(className)).build()!!
 
 inline fun `abstract class`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.classBuilder(className)).addModifiers(Modifier.ABSTRACT).build()!!
 
-inline fun JavaFile.Builder.`abstract class`(className: ClassName, typeSpecFunc: TypeMethod)
-        = typeSpecFunc(TypeSpec.classBuilder(className).addModifiers(Modifier.ABSTRACT)).build()!!
-
 inline fun `final class`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.classBuilder(className)).addModifiers(Modifier.FINAL).build()!!
-
-inline fun JavaFile.Builder.`final class`(className: ClassName, typeSpecFunc: TypeMethod)
-        = typeSpecFunc(TypeSpec.classBuilder(className).addModifiers(Modifier.FINAL)).build()!!
 
 inline fun `enum`(className: String, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.enumBuilder(className)).build()!!
 
-inline fun JavaFile.Builder.`enum`(className: ClassName, typeSpecFunc: TypeMethod)
-        = typeSpecFunc(TypeSpec.enumBuilder(className)).build()!!
-
-inline fun JavaFile.Builder.`anonymous class`(typeArgumentsFormat: String, vararg args: Any?,
+inline fun `anonymous class`(typeArgumentsFormat: String, vararg args: Any?,
                                               typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.anonymousClassBuilder(typeArgumentsFormat, *args)).build()!!
 
 inline fun `@interface`(className: String, typeSpecFunc: TypeMethod)
-        = typeSpecFunc(TypeSpec.annotationBuilder(className)).build()!!
-
-inline fun JavaFile.Builder.`@interface`(className: ClassName, typeSpecFunc: TypeMethod)
         = typeSpecFunc(TypeSpec.annotationBuilder(className)).build()!!
 
 fun TypeSpec.Builder.constructor(vararg parameters: ParameterSpec.Builder,

@@ -34,7 +34,7 @@ class MethodExtensionsTest : Spek({
                         "      break;\n" +
                         "    }\n" +
                         "    default: {\n" +
-                        "      this.name= \"NO BONUS\";\n" +
+                        "      this.name = \"NO BONUS\";\n" +
                         "      break;\n" +
                         "    }\n" +
                         "  }\n" +
