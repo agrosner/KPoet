@@ -9,10 +9,12 @@ inline fun CodeBlock.Builder.default(function: CodeMethod)
         = beginControlFlow("default:").function().endControlFlow()!!
 
 inline fun CodeBlock.Builder.code(codeMethod: CodeMethod)
-        = add(codeMethod(CodeBlock.builder()).build())!!
+        = add(CodeBlock.builder().codeMethod().build())!!
+
+inline fun code(codeMethod: CodeMethod) = CodeBlock.builder().codeMethod().build()!!
 
 inline fun CodeBlock.Builder.statement(codeMethod: CodeMethod)
-        = addStatement("\$L", codeMethod(CodeBlock.builder()).build().toString())!!
+        = addStatement(CodeBlock.builder().codeMethod().build().L)!!
 
 fun CodeBlock.Builder.statement(code: String, vararg args: Any?) = addStatement(code, *args)!!
 
