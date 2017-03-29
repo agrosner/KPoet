@@ -100,4 +100,11 @@ inline fun MethodSpec.Builder.beginControl(name: String, statement: String = "",
 
 inline fun MethodSpec.Builder.endControl(name: String, statement: String = "", vararg args: Any?)
         = endControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)!!
-}
+
+fun MethodSpec.Builder.javadoc(format: String, vararg args: Any?) = addJavadoc(format, args)
+
+fun MethodSpec.Builder.javadoc(codeBlock: CodeBlock) = addJavadoc(codeBlock)
+
+fun MethodSpec.Builder.comment(format: String, vararg args: Any?) = addComment(format, args)
+
+

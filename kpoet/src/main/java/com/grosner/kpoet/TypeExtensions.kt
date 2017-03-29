@@ -86,3 +86,8 @@ fun TypeSpec.Builder.case(name: String, function: TypeMethod) = addEnumConstant(
 fun TypeSpec.Builder.case(name: String, parameter: String, vararg args: Any?, function: TypeMethod = { this })
         = addEnumConstant(name, TypeSpec.anonymousClassBuilder(parameter, *args).function().build())!!
 
+fun TypeSpec.Builder.javadoc(doc: String, vararg args: Any?) = addJavadoc(doc, args)
+
+fun TypeSpec.Builder.javadoc(codeBlock: CodeBlock) = addJavadoc(codeBlock)
+
+

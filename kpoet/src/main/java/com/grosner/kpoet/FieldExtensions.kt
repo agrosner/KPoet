@@ -39,3 +39,7 @@ fun FieldSpec.Builder.`@`(kClass: KClass<*>, annotationMethod: AnnotationMethod 
 
 fun FieldSpec.Builder.`@`(className: ClassName, annotationMethod: AnnotationMethod = { this })
         = addAnnotation(AnnotationSpec.builder(className).annotationMethod().build())!!
+
+fun FieldSpec.Builder.javadoc(doc: String, vararg args: Any?) = addJavadoc(doc, args)
+
+fun FieldSpec.Builder.javadoc(codeBlock: CodeBlock) = addJavadoc(codeBlock)
