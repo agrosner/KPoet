@@ -54,7 +54,7 @@ So using `KPoet` from the previous example:
 ```kotlin
 
 javaFile("com.example.helloworld") {
-  `class`("HelloWorld") {  modifiers(publicFinal)
+  `class`("HelloWorld") {  modifiers(public, final)
 
     `public static`(TypeName.VOID, "main",
         param(Array<String>::class, "args")) {
@@ -102,8 +102,7 @@ We represent it as:
        param(String::class, "action")) {
   switch("action") {
     case("bonus".S) {
-       // str -> "\$S", "bonus"
-      statement("this.name = ${"BONUS".S}")
+      statement("this.name = ${"BONUS".S}") // .S wraps it in quotes
       `break`()
     }
     default {
@@ -113,7 +112,7 @@ We represent it as:
   }
 
   `if`("this.name == ${"BONUS".S}") {
-    `return`(true.L) // L -> true.toString()
+    `return`(true.L) // string literal representation with .L
   }.`else if`("this.name == ${"NO_BONUS".S}") {
     `return`(false.L)
   }.end() // end required for `if` and `else if`.
@@ -192,9 +191,11 @@ val main = `fun`(TypeName.VOID, "main") {
 
 do..while:
 
+```kotlin
 `do` {
   statement("i++")
 }.`while`("sum < 20")
+```
 
 ### Literals
 
@@ -256,7 +257,7 @@ You will still need to pass that `Class` or `TypeName` to JavaPoet:
     field(TypeName.BOOLEAN, isReady, { `=`(false.L) })
     field(String::class, isReady, { `=`("SomeName".S) })
 
-    constructor(param(TypeName.BOOLEAN, isReady)) {
+    `constructor`(param(TypeName.BOOLEAN, isReady)) {
         statement("this.$isReady = $isReady")
     }
 }
@@ -348,11 +349,11 @@ To add annotations to parameters, simply call:
 ```kotlin
 
 `fun`(TypeName.VOID, "welcomeOverlords",
-  `final param`(`@`(TestAnnotation::class), String::class, "android"),)
+  `final param`(`@`(TestAnnotation::class), String::class, "android"),
   `final param`(`@`(TestAnnotation::class, {
                     this["name"] = "Some Kind of Member".S // we use a map to construct the properties here.
                     this["purpose"] = "Some Purpose we have".S
-                }, String::class, "robot")
+                }, String::class, "robot")))
 ```
 
 #### Fields
