@@ -139,7 +139,7 @@ allProjects {
 
 ```gradle
 compile 'com.squareup:javapoet:1.8.0' // version of JavaPoet currently
-compile 'com.github.agrosner.KPoet:kpoet:1.0' // version of KPoet
+compile 'com.github.agrosner:KPoet:1.0.0' // version of KPoet
 ```
 
 The next few sections we attempt to mirror the JavaPoet readme, but converted syntax for KPoet, to give you an idea of what the library provides.
