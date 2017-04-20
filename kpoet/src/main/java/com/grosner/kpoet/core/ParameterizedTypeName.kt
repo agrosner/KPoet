@@ -103,8 +103,9 @@ class ParameterizedTypeName private constructor(private val enclosingType: Param
         /**
          * Returns a parameterized type, applying `typeArguments` to `rawType`.
          */
-        operator fun get(rawType: KClass<*>, vararg typeArguments: Type): ParameterizedTypeName {
-            return ParameterizedTypeName(null, ClassName[rawType], list(typeArguments.toList().toTypedArray()))
+        operator fun get(rawType: KClass<*>, vararg typeArguments: KClass<*>): ParameterizedTypeName {
+            return ParameterizedTypeName(null, ClassName[rawType],
+                    list(typeArguments.toList().map { it.java }.toTypedArray()))
         }
 
         /**

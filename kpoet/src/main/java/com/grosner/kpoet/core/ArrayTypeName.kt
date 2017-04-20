@@ -50,8 +50,8 @@ class ArrayTypeName private constructor(val componentType: TypeName,
          */
         operator fun get(mirror: ArrayType) = get(mirror, LinkedHashMap<TypeParameterElement, TypeVariableName>())
 
-        internal operator fun get(
-                mirror: ArrayType, typeVariables: Map<TypeParameterElement, TypeVariableName>): ArrayTypeName {
+        internal operator fun get(mirror: ArrayType,
+                                  typeVariables: MutableMap<TypeParameterElement, TypeVariableName>): ArrayTypeName {
             return ArrayTypeName(TypeName[mirror.componentType, typeVariables])
         }
 

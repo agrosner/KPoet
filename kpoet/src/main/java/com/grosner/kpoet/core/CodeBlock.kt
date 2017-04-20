@@ -23,6 +23,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.lang.model.element.Element
 import javax.lang.model.type.TypeMirror
+import kotlin.reflect.KClass
 
 /**
  * A fragment of a .java file, potentially containing declarations, statements, and documentation.
@@ -235,7 +236,7 @@ class CodeBlock private constructor(builder: CodeBlock.Builder) {
                     }
                 }
                 val s = if (unused.size == 1) "" else "s"
-                checkArgument(unused.isEmpty(), "unused argument%s: %s", s, Util.join(", ", unused))
+                checkArgument(unused.isEmpty(), "unused argument$s: ${unused.joinToString(separator = ", ")}")
             }
             return this
         }
@@ -260,7 +261,7 @@ class CodeBlock private constructor(builder: CodeBlock.Builder) {
             if (o is ParameterSpec) return o.name
             if (o is FieldSpec) return o.name
             if (o is MethodSpec) return o.name
-            if (o is TypeSpec) return o.name
+            if (o is TypeSpec) return o.name ?: ""
             throw IllegalArgumentException("expected name but was " + o)
         }
 
@@ -272,6 +273,7 @@ class CodeBlock private constructor(builder: CodeBlock.Builder) {
             if (o is TypeName) return o
             if (o is TypeMirror) return TypeName[o]
             if (o is Element) return TypeName[o.asType()]
+            if (o is KClass<*>) return TypeName[o.java]
             if (o is Type) return TypeName[o]
             throw IllegalArgumentException("expected type but was " + o)
         }

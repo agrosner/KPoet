@@ -15,7 +15,8 @@
  */
 package com.grosner.kpoet.core
 
-import com.grosner.kpoet.core.Util.*
+import com.grosner.kpoet.core.Util.checkArgument
+import com.grosner.kpoet.core.Util.checkState
 import java.io.IOException
 import java.io.StringWriter
 import java.lang.reflect.Type
@@ -204,9 +205,9 @@ class MethodSpec private constructor(builder: MethodSpec.Builder) {
 
         override fun addAnnotation(annotation: KClass<*>) = addAnnotation(ClassName.get(annotation))
 
-        override fun addModifiers(vararg modifiers: Modifier) = apply { this.modifiers.addAll(modifiers.toList()) }
+        override fun modifiers(vararg modifiers: Modifier) = apply { this.modifiers.addAll(modifiers.toList()) }
 
-        override fun addModifiers(modifiers: Iterable<Modifier>) = apply {
+        override fun modifiers(modifiers: Iterable<Modifier>) = apply {
             for (modifier in modifiers) {
                 this.modifiers.add(modifier)
             }
@@ -220,12 +221,14 @@ class MethodSpec private constructor(builder: MethodSpec.Builder) {
 
         override fun addTypeVariable(typeVariable: TypeVariableName) = apply { typeVariables.add(typeVariable) }
 
-        fun returns(returnType: TypeName) = apply {
+        infix fun returns(returnType: TypeName) = apply {
             checkState(name != CONSTRUCTOR, "constructor cannot have return type.")
             this.returnType = returnType
         }
 
-        fun returns(returnType: Type) = returns(TypeName[returnType])
+        infix fun returns(returnType: Type) = returns(TypeName[returnType])
+
+        infix fun returns(returnType: KClass<*>) = returns(TypeName[returnType.java])
 
         fun addParameters(parameterSpecs: Iterable<ParameterSpec>) = apply {
             for (parameterSpec in parameterSpecs) {
@@ -320,7 +323,7 @@ class MethodSpec private constructor(builder: MethodSpec.Builder) {
          *
          *
          * This will copy its visibility modifiers, type parameters, return type, name, parameters, and
-         * throws declarations. An [Override] annotation will be added.
+         * throws declarations. An [Override] addAnnotation will be added.
          *
          *
          *
@@ -344,7 +347,7 @@ class MethodSpec private constructor(builder: MethodSpec.Builder) {
             modifiers = LinkedHashSet(modifiers)
             modifiers.remove(Modifier.ABSTRACT)
             modifiers.remove(Util.DEFAULT) // LinkedHashSet permits null as element for Java 7
-            methodBuilder.addModifiers(modifiers)
+            methodBuilder.modifiers(modifiers)
 
             method.typeParameters
                     .map { it.asType() as TypeVariable }
@@ -368,7 +371,7 @@ class MethodSpec private constructor(builder: MethodSpec.Builder) {
          *
          *
          * This will copy its visibility modifiers, type parameters, return type, name, parameters, and
-         * throws declarations. An [Override] annotation will be added.
+         * throws declarations. An [Override] addAnnotation will be added.
          *
          *
          *

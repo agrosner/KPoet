@@ -1,6 +1,6 @@
 # KPoet
 
-KPoet is a Kotlin extensions library on top of [JavaPoet](https://github.com/square/javapoet) that helps you write code generators / annotation processors that _feel_ like actually writing Java code directly. It provides a Kotlin DSL syntax that resembles real java code as much as possible.
+KPoet is a Kotlin extensions library on top of [JavaPoet](https://github.com/square/javapoet) that helps you write code generators / addAnnotation processors that _feel_ like actually writing Java code directly. It provides a Kotlin DSL syntax that resembles real java code as much as possible.
 Also it attempts to make the code generator writing clear as writing native java code itself.
 
 Here's a (boring) `HelloWorld` class:
@@ -21,14 +21,14 @@ Is represented in JavaPoet like:
 ```java
 
 MethodSpec main = MethodSpec.methodBuilder("main")
-    .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+    .modifiers(Modifier.PUBLIC, Modifier.STATIC)
     .returns(void.class)
     .addParameter(String[].class, "args")
     .addStatement("$T.out.println($S)", System.class, "Hello, JavaPoet!")
     .build();
 
 TypeSpec helloWorld = TypeSpec.classBuilder("HelloWorld")
-    .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+    .modifiers(Modifier.PUBLIC, Modifier.FINAL)
     .addMethod(main)
     .build();
 

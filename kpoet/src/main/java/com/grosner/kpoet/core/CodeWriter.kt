@@ -15,7 +15,9 @@
  */
 package com.grosner.kpoet.core
 
-import com.grosner.kpoet.core.Util.*
+import com.grosner.kpoet.core.Util.checkArgument
+import com.grosner.kpoet.core.Util.checkState
+import com.grosner.kpoet.core.Util.stringLiteralWithDoubleQuotes
 import java.io.IOException
 import java.util.*
 import javax.lang.model.SourceVersion
@@ -286,8 +288,8 @@ internal class CodeWriter(out: Appendable, private val indent: String,
 
             if (resolved == c) {
                 val suffixOffset = c.simpleNames().size - 1
-                return join(".", className.simpleNames().subList(
-                        suffixOffset, className.simpleNames().size))
+                return className.simpleNames().subList(
+                        suffixOffset, className.simpleNames().size).joinToString(separator = ".")
             }
             c = c.enclosingClassName()
         }
@@ -300,7 +302,7 @@ internal class CodeWriter(out: Appendable, private val indent: String,
         // If the class is in the same package, we're done.
         if (packageName == className.packageName()) {
             referencedNames.add(className.topLevelClassName().simpleName())
-            return join(".", className.simpleNames())
+            return className.simpleNames().joinToString(separator = ".")
         }
 
         // We'll have to use the fully-qualified name. Mark the type as importable for a future pass.
@@ -354,9 +356,9 @@ internal class CodeWriter(out: Appendable, private val indent: String,
 
     /** Returns the class named `simpleName` when nested in the class at `stackDepth`.  */
     private fun stackClassName(stackDepth: Int, simpleName: String): ClassName {
-        var className = ClassName[packageName, typeSpecStack[0].name]
+        var className = ClassName[packageName, typeSpecStack[0].name!!]
         for (i in 1..stackDepth) {
-            className = className.nestedClass(typeSpecStack[i].name)
+            className = className.nestedClass(typeSpecStack[i].name!!)
         }
         return className.nestedClass(simpleName)
     }

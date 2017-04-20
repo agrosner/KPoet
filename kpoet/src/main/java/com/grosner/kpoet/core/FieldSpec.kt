@@ -127,8 +127,10 @@ class FieldSpec private constructor(builder: FieldSpec.Builder) {
             return Builder(type, name).addModifiers(*modifiers)
         }
 
-        fun builder(type: Type, name: String, vararg modifiers: Modifier): Builder {
-            return builder(TypeName[type], name, *modifiers)
-        }
+        fun builder(type: Type, name: String, vararg modifiers: Modifier)
+                = builder(TypeName[type], name, *modifiers)
+
+        fun builder(type: KClass<*>, name: String, vararg modifiers: Modifier)
+                = builder(type.java, name, *modifiers)
     }
 }

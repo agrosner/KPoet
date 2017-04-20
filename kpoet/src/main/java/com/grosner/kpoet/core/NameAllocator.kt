@@ -40,7 +40,7 @@ import javax.lang.model.SourceVersion
  * Once we've allocated names we can use them when generating code: <pre>   `<p>
  * MethodSpec.Builder builder = MethodSpec.methodBuilder("toString")
  * .addAnnotation(Override.class)
- * .addModifiers(Modifier.PUBLIC)
+ * .modifiers(Modifier.PUBLIC)
  * .returns(String.class);
  * <p>
  * builder.addStatement("$1T $2N = new $1T()",

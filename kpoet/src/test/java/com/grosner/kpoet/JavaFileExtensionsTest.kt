@@ -13,7 +13,7 @@ class JavaFileExtensionsTest : Spek({
         on("Can create standard java file with static imports") {
             val file = javaFile("com.grosner", {
                 `import static`(Collections::class, "*")
-                `import static`(ClassName.get(String::class.java), "*")
+                `import static`(ClassName[String::class], "*")
             }) {
                 `class`("HelloWorld") {
                     this

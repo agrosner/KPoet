@@ -46,7 +46,7 @@ import kotlin.reflect.KClass
  * Primitives and void are constants that you can reference directly: see [.INT], [ ][.DOUBLE], and [.VOID].
 
  *
- * In an annotation processor you can get a type name instance for a type mirror by calling
+ * In an addAnnotation processor you can get a type name instance for a type mirror by calling
  * [.get]. In reflection code, you can use [.get].
 
  * <h3>Defining new types</h3>
@@ -135,16 +135,14 @@ open class TypeName internal constructor(
         else -> throw UnsupportedOperationException("cannot unbox " + this)
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (o == null) return false
-        if (javaClass != o.javaClass) return false
-        return toString() == o.toString()
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null) return false
+        if (javaClass != other.javaClass) return false
+        return toString() == other.toString()
     }
 
-    override fun hashCode(): Int {
-        return toString().hashCode()
-    }
+    override fun hashCode() = toString().hashCode()
 
     override fun toString(): String {
         var result = cachedString

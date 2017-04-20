@@ -36,7 +36,7 @@ class ClassName private constructor(
          * From top to bottom. This will be ["java.util", "Map", "Entry"] for [Map.Entry].
          */
         internal val names: List<String>, annotations: List<AnnotationSpec> = ArrayList<AnnotationSpec>())
-    : TypeName(annotations), Comparable<ClassName> {
+    : TypeName(annotations = annotations), Comparable<ClassName> {
 
     internal val canonicalName: String
 
@@ -111,10 +111,10 @@ class ClassName private constructor(
      */
     fun simpleName() = names[names.size - 1]
 
-    override fun compareTo(o: ClassName) = canonicalName.compareTo(o.canonicalName)
+    override fun compareTo(other: ClassName) = canonicalName.compareTo(other.canonicalName)
 
     @Throws(IOException::class)
-    internal override fun emit(out: CodeWriter) = out.emitAndIndent(out.lookupName(this))
+    override fun emit(out: CodeWriter) = out.emitAndIndent(out.lookupName(this))
 
     companion object {
         val OBJECT = ClassName[Any::class]

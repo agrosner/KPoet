@@ -316,14 +316,14 @@ class TypeSpec private constructor(builder: TypeSpec.Builder) {
 
         override fun addAnnotation(annotation: KClass<*>) = addAnnotation(ClassName[annotation])
 
-        override fun addModifiers(vararg modifiers: Modifier) = apply {
+        override fun modifiers(vararg modifiers: Modifier) = apply {
             checkState(anonymousTypeArguments == null, "forbidden on anonymous types.")
             for (modifier in modifiers) {
                 this.modifiers.add(modifier)
             }
         }
 
-        override fun addModifiers(modifiers: Iterable<Modifier>) = apply {
+        override fun modifiers(modifiers: Iterable<Modifier>) = apply {
             checkState(anonymousTypeArguments == null, "forbidden on anonymous types.")
             for (modifier in modifiers) {
                 this.modifiers.add(modifier)
@@ -483,7 +483,7 @@ class TypeSpec private constructor(builder: TypeSpec.Builder) {
 
         fun enumBuilder(className: ClassName) = enumBuilder(className.simpleName())
 
-        fun anonymousClassBuilder(typeArgumentsFormat: String, vararg args: Any): Builder {
+        fun anonymousClassBuilder(typeArgumentsFormat: String, vararg args: Any?): Builder {
             return Builder(Kind.CLASS, null, CodeBlock.builder()
                     .add(typeArgumentsFormat, *args)
                     .build())

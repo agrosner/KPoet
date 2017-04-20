@@ -82,7 +82,7 @@ class TypeExtensionsTest : Spek({
                 implements(parameterized<String>(Comparable::class), Serializable::class.typeName)
 
                 `public`(Int::class, "compareTo", param(String::class, "other")) {
-                    annotation(Override::class)
+                    addAnnotation(Override::class)
                     `return`(0.L)
                 }
             }

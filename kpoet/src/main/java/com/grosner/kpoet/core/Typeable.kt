@@ -3,7 +3,7 @@ package com.grosner.kpoet.core
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-interface Typeable<out Builder> {
+interface Typeable<out Builder : Typeable<Builder>> {
 
     fun addJavadoc(format: String, vararg args: Any): Builder
 
@@ -15,9 +15,9 @@ interface Typeable<out Builder> {
 
     fun addAnnotation(annotation: KClass<*>): Builder
 
-    fun addModifiers(vararg modifiers: Modifier): Builder
+    fun modifiers(vararg modifiers: Modifier): Builder
 
-    fun addModifiers(modifiers: Iterable<Modifier>): Builder
+    fun modifiers(modifiers: Iterable<Modifier>): Builder
 
     fun addAnnotations(annotationSpecs: Iterable<AnnotationSpec>): Builder
 

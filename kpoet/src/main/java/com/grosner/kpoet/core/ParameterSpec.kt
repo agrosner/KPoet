@@ -119,12 +119,13 @@ class ParameterSpec private constructor(builder: ParameterSpec.Builder) {
 
         fun builder(type: TypeName, name: String, vararg modifiers: Modifier): Builder {
             checkArgument(SourceVersion.isName(name), "not a valid name: %s", name)
-            return Builder(type, name)
-                    .addModifiers(*modifiers)
+            return Builder(type, name).addModifiers(*modifiers)
         }
 
-        fun builder(type: Type, name: String, vararg modifiers: Modifier): Builder {
-            return builder(TypeName[type], name, *modifiers)
-        }
+        fun builder(type: Type, name: String, vararg modifiers: Modifier)
+                = builder(TypeName[type], name, *modifiers)
+
+        fun builder(type: KClass<*>, name: String, vararg modifiers: Modifier)
+                = builder(type.java, name, *modifiers)
     }
 }

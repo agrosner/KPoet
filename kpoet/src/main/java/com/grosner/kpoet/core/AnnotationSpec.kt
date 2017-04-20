@@ -34,7 +34,7 @@ import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.jvm.javaMethod
 
 /**
- * A generated annotation on a declaration.
+ * A generated addAnnotation on a declaration.
  */
 class AnnotationSpec private constructor(builder: AnnotationSpec.Builder) {
 

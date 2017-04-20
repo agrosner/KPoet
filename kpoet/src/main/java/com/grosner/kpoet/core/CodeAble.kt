@@ -3,7 +3,7 @@ package com.grosner.kpoet.core
 /**
  * Description:
  */
-interface CodeAble<Builder> {
+interface CodeAble<out Builder : CodeAble<Builder>> {
 
     fun beginControlFlow(controlFlow: String, vararg args: Any?): Builder
 
