@@ -1,6 +1,6 @@
 package com.grosner.kpoet
 
-import com.squareup.javapoet.ClassName
+import com.grosner.kpoet.gen.ClassName
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it

@@ -1,8 +1,8 @@
 package com.grosner.kpoet
 
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.JavaFile
-import com.squareup.javapoet.TypeSpec
+import com.grosner.kpoet.gen.ClassName
+import com.grosner.kpoet.gen.JavaFile
+import com.grosner.kpoet.gen.TypeSpec
 import kotlin.reflect.KClass
 
 fun javaFile(packageName: String, imports: JavaFile.Builder.() -> JavaFile.Builder = { this },

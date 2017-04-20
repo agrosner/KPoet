@@ -1,6 +1,6 @@
 package com.grosner.kpoet
 
-import com.squareup.javapoet.*
+import com.grosner.kpoet.gen.*
 import kotlin.reflect.KClass
 
 fun field(typeName: TypeName, name: String, fieldMethod: FieldMethod = { this })

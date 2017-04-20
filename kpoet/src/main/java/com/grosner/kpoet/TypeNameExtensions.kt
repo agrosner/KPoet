@@ -1,7 +1,7 @@
 package com.grosner.kpoet
 
-import com.squareup.javapoet.ParameterizedTypeName
-import com.squareup.javapoet.TypeName
+import com.grosner.kpoet.gen.ParameterizedTypeName
+import com.grosner.kpoet.gen.TypeName
 import javax.lang.model.type.TypeMirror
 import kotlin.reflect.KClass
 
