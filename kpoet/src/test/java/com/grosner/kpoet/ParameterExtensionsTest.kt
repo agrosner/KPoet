@@ -1,6 +1,6 @@
 package com.grosner.kpoet
 
-import com.grosner.kpoet.gen.TypeName
+import com.grosner.kpoet.core.TypeName
 import org.jetbrains.annotations.Nullable
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe

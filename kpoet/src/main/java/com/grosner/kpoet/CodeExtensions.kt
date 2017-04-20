@@ -1,6 +1,6 @@
 package com.grosner.kpoet
 
-import com.grosner.kpoet.gen.CodeBlock
+import com.grosner.kpoet.core.CodeBlock
 
 inline fun CodeBlock.Builder.case(statement: String, vararg args: Any, function: CodeMethod)
         = beginControlFlow("case $statement:", args).function().endControlFlow()!!

@@ -1,6 +1,6 @@
 package com.grosner.kpoet
 
-import com.grosner.kpoet.gen.*
+import com.grosner.kpoet.core.*
 import javax.lang.model.element.Modifier
 import javax.lang.model.element.Modifier.*
 import kotlin.reflect.KClass

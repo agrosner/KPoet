@@ -1,9 +1,9 @@
 package com.grosner.kpoet
 
-import com.grosner.kpoet.gen.AnnotationSpec
-import com.grosner.kpoet.gen.ClassName
-import com.grosner.kpoet.gen.ParameterSpec
-import com.grosner.kpoet.gen.TypeName
+import com.grosner.kpoet.core.AnnotationSpec
+import com.grosner.kpoet.core.ClassName
+import com.grosner.kpoet.core.ParameterSpec
+import com.grosner.kpoet.core.TypeName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 

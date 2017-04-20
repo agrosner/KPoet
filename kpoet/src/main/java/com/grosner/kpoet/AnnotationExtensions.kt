@@ -1,8 +1,8 @@
 package com.grosner.kpoet
 
-import com.grosner.kpoet.gen.AnnotationSpec
-import com.grosner.kpoet.gen.ClassName
-import com.grosner.kpoet.gen.CodeBlock
+import com.grosner.kpoet.core.AnnotationSpec
+import com.grosner.kpoet.core.ClassName
+import com.grosner.kpoet.core.CodeBlock
 import kotlin.reflect.KClass
 
 fun AnnotationSpec.Builder.member(name: String, format: String, vararg args: Any?) = addMember(name, format, *args)
