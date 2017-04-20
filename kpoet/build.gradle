@@ -5,6 +5,7 @@ project.ext.artifactId = bt_name
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.jetbrains.spek:spek-api:1.1.0'

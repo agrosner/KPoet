@@ -14,7 +14,7 @@ fun AnnotationSpec.Builder.member(name: String, codeBlockFunc: CodeBlock.Builder
 
 
 fun `@`(kClass: KClass<*>, mapFunc: MutableMap<String, String>.() -> Unit = { })
-        = AnnotationSpec.builder(kClass.java)
+        = AnnotationSpec.builder(kClass)
         .apply {
             mutableMapOf<String, String>().apply { mapFunc(this) }
                     .forEach { key, value -> addMember(key, value) }
