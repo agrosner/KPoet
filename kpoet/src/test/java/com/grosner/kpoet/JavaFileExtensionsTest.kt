@@ -16,7 +16,6 @@ class JavaFileExtensionsTest : Spek({
                 `import static`(ClassName[String::class], "*")
             }) {
                 `class`("HelloWorld") {
-                    this
                 }
             }
 
@@ -25,11 +24,11 @@ class JavaFileExtensionsTest : Spek({
             it("should print proper code") {
                 assertEquals(
                         "package com.grosner;\n\n" +
-                        "import static java.lang.String.*;\n" +
-                        "import static java.util.Collections.*;\n\n" +
+                                "import static java.lang.String.*;\n" +
+                                "import static java.util.Collections.*;\n\n" +
 
-                        "class HelloWorld {\n" +
-                        "}\n",
+                                "class HelloWorld {\n" +
+                                "}\n",
                         file.toString())
             }
         }

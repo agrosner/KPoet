@@ -4,12 +4,12 @@ import com.grosner.kpoet.core.*
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-typealias CodeAbleMethod = CodeAble<*>.() -> CodeAble<*>
-typealias CodeMethod = CodeBlock.Builder.() -> CodeBlock.Builder
-typealias MethodMethod = MethodSpec.Builder.() -> MethodSpec.Builder
-typealias FieldMethod = FieldSpec.Builder.() -> FieldSpec.Builder
-typealias ParamMethod = ParameterSpec.Builder.() -> ParameterSpec.Builder
-typealias AnnotationMethod = AnnotationSpec.Builder.() -> AnnotationSpec.Builder
-typealias TypeMethod = TypeSpec.Builder.() -> TypeSpec.Builder
+typealias CodeAbleMethod = CodeAble<*>.() -> Unit
+typealias CodeMethod = CodeBlock.Builder.() -> Unit
+typealias MethodMethod = MethodSpec.Builder.() -> Unit
+typealias FieldMethod = FieldSpec.Builder.() -> Unit
+typealias ParamMethod = ParameterSpec.Builder.() -> Unit
+typealias AnnotationMethod = AnnotationSpec.Builder.() -> Unit
+typealias TypeMethod = TypeSpec.Builder.() -> Unit
 
 

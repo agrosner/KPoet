@@ -5,17 +5,16 @@ import com.grosner.kpoet.core.CodeAble
 import com.grosner.kpoet.core.CodeBlock
 import kotlin.reflect.KClass
 
-inline fun CodeAble<*>.code(codeMethod: CodeMethod) = add(codeMethod(CodeBlock
-        .builder()).build())
+inline fun CodeAble<*>.code(codeMethod: CodeMethod) = add(CodeBlock.builder().apply(codeMethod).build())
 
 inline fun CodeAble<*>.case(statement: String, vararg args: Any, function: CodeAbleMethod)
-        = beginControlFlow("case $statement:", args).function().endControlFlow()
+        = beginControlFlow("case $statement:", args).apply(function).endControlFlow()
 
 inline fun CodeAble<*>.default(function: CodeAbleMethod)
-        = beginControlFlow("default:").function().endControlFlow()
+        = beginControlFlow("default:").apply(function).endControlFlow()
 
 inline fun CodeAble<*>.statement(codeMethod: CodeMethod)
-        = addStatement(CodeBlock.builder().codeMethod().build().L)
+        = addStatement(CodeBlock.builder().apply(codeMethod).build().L)
 
 fun CodeAble<*>.statement(code: String, vararg args: Any?) = addStatement(code, *args)
 
@@ -62,12 +61,12 @@ fun CodeAble<*>.`throw new`(type: ClassName, statement: String, vararg arg: Any?
 inline fun CodeAble<*>.nextControl(name: String, statement: String = "", vararg args: Any?,
                                    function: CodeMethod)
         = nextControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)
-        .add(function(CodeBlock.builder()).build())
+        .add(CodeBlock.builder().apply(function).build())
 
 inline fun CodeAble<*>.beginControl(name: String, statement: String = "", vararg args: Any?,
                                     function: CodeMethod)
         = beginControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)
-        .add(function(CodeBlock.builder()).build())
+        .add(CodeBlock.builder().apply(function).build())
 
 inline fun CodeAble<*>.endControl(name: String, statement: String = "", vararg args: Any?)
         = endControlFlow("$name${if (statement.isNullOrEmpty()) "" else " ($statement)"}", *args)
