@@ -58,7 +58,7 @@ javaFile("com.example.helloworld") {
 
     `public static`(TypeName.VOID, "main",
         param(Array<String>::class, "args")) {
-      statement("\$T.out.println(${"Hello, JavaPoet!"}.S)", System::class.java)
+      statement("\$T.out.println(${"Hello, JavaPoet!".S})", System::class.java)
     }
   }
 }.writeTo(System.out)
